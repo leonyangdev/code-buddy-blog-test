@@ -254,7 +254,7 @@ export default function ContactPage() {
                     icon: Globe,
                     name: "Twitter",
                     desc: "关注我的技术分享",
-                    href: `https://twitter.com/${githubProfile.twitter}`,
+                    href: githubProfile.twitterUrl,
                   },
                 ].map((social) => (
                   <Link
