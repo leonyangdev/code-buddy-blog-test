@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
-import { ArrowRight, BookOpen, FolderOpen, Mail } from "lucide-react"
+import { ArrowRight, Mail } from "lucide-react"
 import { getLatestPosts, getFeaturedProjects } from "@/lib/data"
 import { PostCard } from "@/components/blog/post-card"
 import { ProjectCard } from "@/components/blog/project-card"
@@ -9,7 +9,7 @@ import { HeroSection } from "@/components/layout/hero-section"
 import { NewsletterForm } from "@/components/layout/newsletter-form"
 
 export default function Home() {
-  const latestPosts = getLatestPosts(3)
+  const latestPosts = getLatestPosts(4)
   const featuredProjects = getFeaturedProjects()
 
   return (
@@ -17,14 +17,14 @@ export default function Home() {
       <HeroSection />
 
       <div className="container mx-auto px-4 md:px-6">
-        {/* Latest Posts */}
+        {/* Latest Posts — list style */}
         <section className="py-16 md:py-20">
           <SectionHeading
             title="最新文章"
             description="探索最新的技术见解和实战经验"
             href="/blog"
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+          <div>
             {latestPosts.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}
@@ -38,19 +38,21 @@ export default function Home() {
             description="探索我的开源项目和作品集"
             href="/projects"
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+          <div>
             {featuredProjects.map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}
           </div>
         </section>
 
-        {/* Newsletter CTA */}
+        {/* Newsletter */}
         <section className="py-16 md:py-20 border-t border-border">
           <div className="max-w-xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-muted/50 mb-6">
               <Mail className="size-3.5 text-muted-foreground" />
-              <span className="text-label-13 text-muted-foreground">邮件订阅</span>
+              <span className="text-label-13 text-muted-foreground">
+                邮件订阅
+              </span>
             </div>
             <h2 className="text-heading-32 md:text-heading-40 text-foreground mb-3">
               保持联系
@@ -62,45 +64,38 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Bottom nav shortcuts */}
+        {/* Quick nav */}
         <section className="py-16 md:py-20 border-t border-border">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
               {
                 href: "/blog",
-                icon: BookOpen,
-                title: "博客文章",
-                desc: "浏览所有技术文章和教程",
+                title: "所有文章",
+                desc: "浏览全部技术文章和教程",
               },
               {
                 href: "/projects",
-                icon: FolderOpen,
                 title: "项目作品",
-                desc: "查看我的开源项目和作品集",
+                desc: "查看开源项目和作品集",
               },
               {
                 href: "/about",
-                icon: Mail,
                 title: "关于我",
-                desc: "了解我的技术背景和经历",
+                desc: "了解技术背景和工作经历",
               },
             ].map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="group relative rounded-xl border border-border p-6 transition-all duration-200 hover:border-accent/30 hover:shadow-[var(--shadow-md)]"
+                className="group py-4 -mx-2 px-2 rounded-lg transition-colors duration-150 hover:bg-muted/30"
               >
-                <item.icon className="size-6 text-muted-foreground mb-3 transition-colors duration-200 group-hover:text-accent" />
-                <h3 className="text-heading-16 text-foreground mb-1">
+                <h3 className="text-heading-16 text-foreground mb-1 flex items-center gap-1.5">
                   {item.title}
+                  <ArrowRight className="size-3.5 text-muted-foreground transition-all duration-200 group-hover:text-accent group-hover:translate-x-0.5" />
                 </h3>
-                <p className="text-copy-14 text-muted-foreground mb-3">
+                <p className="text-copy-14 text-muted-foreground">
                   {item.desc}
                 </p>
-                <span className="inline-flex items-center gap-1 text-label-13 text-muted-foreground transition-colors duration-200 group-hover:text-accent">
-                  了解更多
-                  <ArrowRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-                </span>
               </Link>
             ))}
           </div>

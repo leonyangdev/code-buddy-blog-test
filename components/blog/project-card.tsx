@@ -1,8 +1,7 @@
 import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Globe } from "lucide-react"
+import { ExternalLink, Globe, ArrowUpRight } from "lucide-react"
 
 interface ProjectCardProps {
   project: {
@@ -18,51 +17,58 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <Card className="group transition-all duration-200 hover:shadow-[var(--shadow-card-hover)] hover:border-accent/20">
-      <CardHeader>
-        <div className="flex items-center justify-between mb-1">
-          <div className="flex items-center gap-2 flex-wrap">
-            {project.tags.slice(0, 3).map((tag) => (
-              <Badge key={tag} variant="outline" className="text-label-12">
-                {tag}
-              </Badge>
-            ))}
-          </div>
-          {project.featured && (
-            <Badge variant="featured" className="text-label-12 shrink-0">
-              精选
-            </Badge>
-          )}
-        </div>
-        <CardTitle className="text-heading-20 group-hover:text-accent transition-colors duration-150">
-          <Link href={`/projects/${project.id}`}>{project.title}</Link>
-        </CardTitle>
-        <CardDescription className="text-copy-14 line-clamp-2">
-          {project.description}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="flex gap-3">
-          <Link
-            href={project.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={buttonVariants({ variant: "outline", size: "sm" }) + " gap-1.5"}
-          >
-            <Globe className="size-3.5" />
-            GitHub
-          </Link>
-          <Link
-            href={project.demo}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={buttonVariants({ size: "sm" }) + " gap-1.5"}
-          >
-            <ExternalLink className="size-3.5" />
-            演示
-          </Link>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="group relative py-5 border-b border-border last:border-b-0">
+      {/* Tags and featured badge */}
+      <div className="flex items-center gap-2 mb-2 flex-wrap">
+        {project.tags.slice(0, 3).map((tag) => (
+          <Badge key={tag} variant="outline" className="text-label-11">
+            {tag}
+          </Badge>
+        ))}
+        {project.featured && (
+          <Badge variant="featured" className="text-label-11">
+            精选
+          </Badge>
+        )}
+      </div>
+
+      {/* Title */}
+      <Link
+        href={`/projects/${project.id}`}
+        className="block mb-1.5"
+      >
+        <h3 className="text-heading-18 md:text-heading-20 text-foreground group-hover:text-accent transition-colors duration-150 flex items-start gap-2">
+          <span className="flex-1">{project.title}</span>
+          <ArrowUpRight className="size-4 mt-1 shrink-0 opacity-0 -translate-y-1 translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 text-accent" />
+        </h3>
+      </Link>
+
+      {/* Description */}
+      <p className="text-copy-14 text-muted-foreground line-clamp-2 mb-3">
+        {project.description}
+      </p>
+
+      {/* Actions */}
+      <div className="flex gap-3">
+        <Link
+          href={project.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={buttonVariants({ variant: "outline", size: "sm" }) + " gap-1.5"}
+        >
+          <Globe className="size-3.5" />
+          GitHub
+        </Link>
+        <Link
+          href={project.demo}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={buttonVariants({ size: "sm" }) + " gap-1.5"}
+        >
+          <ExternalLink className="size-3.5" />
+          演示
+        </Link>
+      </div>
+    </div>
   )
 }

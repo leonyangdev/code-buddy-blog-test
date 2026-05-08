@@ -203,6 +203,12 @@
     letter-spacing: -0.01em;
     font-weight: 600;
   }
+  .text-heading-18 {
+    font-size: 1.125rem;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+  }
   .text-heading-16 {
     font-size: 1rem;
     line-height: 1.5;
@@ -292,6 +298,11 @@
   }
   .text-label-12 {
     font-size: 0.75rem;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+  .text-label-11 {
+    font-size: 0.6875rem;
     line-height: 1.5;
     font-weight: 500;
   }
