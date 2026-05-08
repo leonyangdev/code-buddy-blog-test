@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useMemo } from "react"
 
 interface ContributionDay {
   date: string
@@ -12,72 +12,60 @@ interface GitHubContributionsProps {
   username: string
 }
 
-export function GitHubContributions({ username }: GitHubContributionsProps) {
-  const [data, setData] = useState<ContributionDay[]>([])
-  const [loading, setLoading] = useState(true)
+function seededRandom(seed: number): () => number {
+  let s = seed
+  return () => {
+    s = (s * 1664525 + 1013904223) & 0xffffffff
+    return (s >>> 0) / 0xffffffff
+  }
+}
 
-  useEffect(() => {
-    // Generate mock contribution data for the past year
-    // In production, replace with actual GitHub API call
-    const generateData = () => {
-      const days: ContributionDay[] = []
-      const today = new Date()
+function generateContributions(username: string): ContributionDay[] {
+  const today = new Date()
+  const seed = username.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0)
+  const rand = seededRandom(seed + today.getFullYear() * 1000 + today.getMonth())
+  const days: ContributionDay[] = []
 
-      for (let i = 364; i >= 0; i--) {
-        const date = new Date(today)
-        date.setDate(date.getDate() - i)
+  for (let i = 364; i >= 0; i--) {
+    const date = new Date(today)
+    date.setDate(date.getDate() - i)
 
-        // Simulate contribution pattern (more active on weekdays)
-        const dayOfWeek = date.getDay()
-        const isWeekday = dayOfWeek > 0 && dayOfWeek < 6
-        const random = Math.random()
+    const dayOfWeek = date.getDay()
+    const isWeekday = dayOfWeek > 0 && dayOfWeek < 6
+    const random = rand()
 
-        let count = 0
-        let level: 0 | 1 | 2 | 3 | 4 = 0
+    let count = 0
+    let level: 0 | 1 | 2 | 3 | 4 = 0
 
-        if (isWeekday) {
-          if (random > 0.3) {
-            count = Math.floor(random * 12) + 1
-            if (count >= 10) level = 4
-            else if (count >= 6) level = 3
-            else if (count >= 3) level = 2
-            else level = 1
-          }
-        } else {
-          if (random > 0.6) {
-            count = Math.floor(random * 5) + 1
-            if (count >= 4) level = 3
-            else if (count >= 2) level = 2
-            else level = 1
-          }
-        }
-
-        days.push({
-          date: date.toISOString().split("T")[0],
-          count,
-          level,
-        })
+    if (isWeekday) {
+      if (random > 0.3) {
+        count = Math.floor(random * 12) + 1
+        if (count >= 10) level = 4
+        else if (count >= 6) level = 3
+        else if (count >= 3) level = 2
+        else level = 1
       }
-
-      return days
+    } else {
+      if (random > 0.6) {
+        count = Math.floor(random * 5) + 1
+        if (count >= 4) level = 3
+        else if (count >= 2) level = 2
+        else level = 1
+      }
     }
 
-    // Simulate API delay
-    const timer = setTimeout(() => {
-      setData(generateData())
-      setLoading(false)
-    }, 500)
-
-    return () => clearTimeout(timer)
-  }, [username])
-
-  if (loading) {
-    return (
-      <div className="h-[120px] flex items-center justify-center">
-        <div className="size-6 border-2 border-muted-foreground/30 border-t-accent rounded-full animate-spin" />
-      </div>
-    )
+    days.push({
+      date: date.toISOString().split("T")[0],
+      count,
+      level,
+    })
   }
+
+  return days
+}
+
+export function GitHubContributions({ username }: GitHubContributionsProps) {
+  const data = useMemo(() => generateContributions(username), [username])
 
   // Group by week
   const weeks: ContributionDay[][] = []

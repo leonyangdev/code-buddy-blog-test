@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useSearchParams } from "next/navigation"
 import { buttonVariants } from "@/components/ui/button"
 import { Search, X } from "lucide-react"
@@ -14,13 +14,7 @@ export default function SearchPage() {
   const [query, setQuery] = useState(initialQuery)
   const [searchResults, setSearchResults] = useState<typeof posts>([])
 
-  useEffect(() => {
-    if (initialQuery) {
-      handleSearch(initialQuery)
-    }
-  }, [initialQuery])
-
-  const handleSearch = (searchQuery: string) => {
+  const handleSearch = useCallback((searchQuery: string) => {
     setQuery(searchQuery)
     if (searchQuery.trim() === "") {
       setSearchResults([])
@@ -35,7 +29,13 @@ export default function SearchPage() {
         post.category.toLowerCase().includes(lowerQuery)
     )
     setSearchResults(results)
-  }
+  }, [])
+
+  useEffect(() => {
+    if (initialQuery) {
+      handleSearch(initialQuery)
+    }
+  }, [initialQuery, handleSearch])
 
   const clearSearch = () => {
     setQuery("")
