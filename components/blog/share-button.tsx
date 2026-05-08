@@ -45,6 +45,7 @@ export function ShareButton({ title, url }: ShareButtonProps) {
   return (
     <button
       onClick={handleShare}
+      aria-label={copied ? "链接已复制" : "分享文章"}
       className="flex items-center gap-1.5 text-label-14 text-muted-foreground hover:text-foreground transition-colors duration-150"
     >
       {copied ? (

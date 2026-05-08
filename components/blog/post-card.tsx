@@ -23,7 +23,10 @@ export function PostCard({ post }: PostCardProps) {
     >
       {/* Date and category row */}
       <div className="flex items-center gap-3 mb-2">
-        <time className="text-label-13 text-muted-foreground tabular-nums">
+        <time
+          dateTime={post.date}
+          className="text-label-13 text-muted-foreground tabular-nums"
+        >
           {post.date}
         </time>
         <span className="text-muted-foreground/30">·</span>

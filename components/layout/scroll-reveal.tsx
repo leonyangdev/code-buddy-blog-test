@@ -21,7 +21,7 @@ export function ScrollReveal({
     if (!el) return
 
     const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce"
+      "(prefers-reduced-motion: reduce)"
     ).matches
 
     if (reducedMotion) {

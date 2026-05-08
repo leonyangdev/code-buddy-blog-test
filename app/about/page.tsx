@@ -1,5 +1,12 @@
+import type { Metadata } from "next"
 import Link from "next/link"
+import Image from "next/image"
 import { buttonVariants } from "@/components/ui/button"
+
+export const metadata: Metadata = {
+  title: "关于我",
+  description: "了解兰亭古墨的技术背景、工作经历和兴趣爱好。",
+}
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -11,7 +18,6 @@ import {
   MapPin,
   Calendar,
   Star,
-  GitFork,
   Globe,
 } from "lucide-react"
 import { githubProfile, projects } from "@/lib/data"
@@ -85,11 +91,13 @@ export default function AboutPage() {
         <CardContent>
           <div className="flex flex-col md:flex-row gap-6">
             <div className="flex-shrink-0">
-              <img
+              <Image
                 src={githubProfile.avatarUrl}
                 alt={githubProfile.name}
-                className="size-28 rounded-full border-2 border-border"
-                loading="lazy"
+                width={112}
+                height={112}
+                className="rounded-full border-2 border-border"
+                priority
               />
             </div>
             <div className="space-y-3 flex-1">

@@ -15,6 +15,7 @@ import {
   AlertCircle,
   Loader2,
 } from "lucide-react"
+import { githubProfile } from "@/lib/data"
 
 interface FormData {
   name: string
@@ -247,19 +248,13 @@ export default function ContactPage() {
                     icon: Globe,
                     name: "GitHub",
                     desc: "查看我的开源项目",
-                    href: "https://github.com",
+                    href: githubProfile.githubUrl,
                   },
                   {
                     icon: Globe,
                     name: "Twitter",
                     desc: "关注我的技术分享",
-                    href: "https://twitter.com",
-                  },
-                  {
-                    icon: Globe,
-                    name: "LinkedIn",
-                    desc: "查看我的职业经历",
-                    href: "https://linkedin.com",
+                    href: `https://twitter.com/${githubProfile.twitter}`,
                   },
                 ].map((social) => (
                   <Link

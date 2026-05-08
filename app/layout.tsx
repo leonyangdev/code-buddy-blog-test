@@ -5,14 +5,15 @@ import "./globals.css"
 import "katex/dist/katex.min.css"
 import { MainLayout } from "@/components/layout/main-layout"
 import { WebsiteJsonLd } from "@/components/seo/json-ld"
+import { githubProfile } from "@/lib/data"
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://your-domain.com"
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "个人技术博客 — 分享技术见解与项目经验",
-    template: "%s | 个人技术博客",
+    default: `${githubProfile.name} — 个人技术博客`,
+    template: `%s | ${githubProfile.name}`,
   },
   description:
     "一个优雅精致的技术博客，分享 Web 开发、前端工程化和用户体验设计的最新见解和实践经验。",
@@ -24,23 +25,35 @@ export const metadata: Metadata = {
     "React",
     "TypeScript",
     "Tailwind CSS",
+    "AI",
+    "RAG",
   ],
-  authors: [{ name: "博主" }],
-  creator: "博主",
+  authors: [{ name: githubProfile.name }],
+  creator: githubProfile.name,
   openGraph: {
     type: "website",
     locale: "zh_CN",
     url: siteUrl,
-    siteName: "个人技术博客",
-    title: "个人技术博客 — 分享技术见解与项目经验",
+    siteName: `${githubProfile.name} 的技术博客`,
+    title: `${githubProfile.name} — 个人技术博客`,
     description:
       "一个优雅精致的技术博客，分享 Web 开发、前端工程化和用户体验设计的最新见解和实践经验。",
+    images: [
+      {
+        url: githubProfile.avatarUrl,
+        width: 400,
+        height: 400,
+        alt: githubProfile.name,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "个人技术博客 — 分享技术见解与项目经验",
+    title: `${githubProfile.name} — 个人技术博客`,
     description:
       "一个优雅精致的技术博客，分享 Web 开发、前端工程化和用户体验设计的最新见解和实践经验。",
+    creator: `@${githubProfile.twitter}`,
+    images: [githubProfile.avatarUrl],
   },
   robots: {
     index: true,

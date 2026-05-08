@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -8,7 +9,7 @@ import {
   Calendar,
   Tag,
 } from "lucide-react"
-import { posts } from "@/lib/data"
+import { posts, githubProfile } from "@/lib/data"
 import { Sidebar } from "@/components/layout/sidebar"
 import { BlogComments } from "@/components/blog/giscus"
 import { PostCard } from "@/components/blog/post-card"
@@ -19,6 +20,36 @@ import { ReadingProgress } from "@/components/blog/reading-progress"
 import { ShareButton } from "@/components/blog/share-button"
 import { BookmarkButton } from "@/components/blog/bookmark-button"
 import { markdownToHtml, extractToc } from "@/lib/markdown"
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://your-domain.com"
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const post = posts.find((p) => p.slug === slug)
+  if (!post) return { title: "文章未找到" }
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: "article",
+      publishedTime: post.date,
+      authors: [githubProfile.name],
+      tags: post.tags,
+    },
+    twitter: {
+      card: "summary",
+      title: post.title,
+      description: post.excerpt,
+    },
+  }
+}
 
 export default async function BlogPostPage({
   params,
@@ -55,9 +86,9 @@ export default async function BlogPostPage({
       <ArticleJsonLd
         title={post.title}
         description={post.excerpt}
-        url={`https://your-domain.com/blog/${post.slug}`}
+        url={`${siteUrl}/blog/${post.slug}`}
         datePublished={post.date}
-        authorName="博主"
+        authorName={githubProfile.name}
         publisherName="个人技术博客"
       />
 
