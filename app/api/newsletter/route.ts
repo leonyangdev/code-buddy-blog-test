@@ -10,12 +10,27 @@ function validateEmail(email: string): boolean {
 
 export async function POST(request: Request) {
   try {
+    const contentType = request.headers.get("content-type")
+    if (!contentType?.includes("application/json")) {
+      return NextResponse.json(
+        { success: false, error: "无效的请求格式" },
+        { status: 415 }
+      )
+    }
+
     const body: NewsletterPayload = await request.json()
     const { email } = body
 
     if (!email?.trim()) {
       return NextResponse.json(
         { success: false, error: "请输入邮箱地址" },
+        { status: 400 }
+      )
+    }
+
+    if (email.length > 254) {
+      return NextResponse.json(
+        { success: false, error: "邮箱地址过长" },
         { status: 400 }
       )
     }

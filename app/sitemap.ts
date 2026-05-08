@@ -1,12 +1,10 @@
 import { MetadataRoute } from "next"
 import { posts, projects } from "@/lib/data"
 
-/**
- * 生成 sitemap.xml
- * 帮助搜索引擎更好地索引网站内容
- */
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://your-domain.com"
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://your-domain.com"
+  const baseUrl = siteUrl
 
   // 静态页面
   const staticPages = [

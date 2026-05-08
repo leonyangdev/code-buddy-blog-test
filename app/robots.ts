@@ -1,18 +1,16 @@
 import { MetadataRoute } from "next"
 
-/**
- * 生成 robots.txt
- * 控制搜索引擎爬虫的访问权限
- */
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://your-domain.com"
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/admin/"],
+        disallow: ["/api/"],
       },
     ],
-    sitemap: "https://your-domain.com/sitemap.xml",
+    sitemap: `${siteUrl}/sitemap.xml`,
   }
 }
