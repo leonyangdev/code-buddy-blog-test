@@ -56,25 +56,25 @@ export async function markdownToHtml(markdown: string): Promise<string> {
 }
 
 /**
- * Extract table of contents from markdown
+ * Extract table of contents from rendered HTML
+ * This ensures IDs match what rehype-slug generates
  */
-export function extractToc(markdown: string): Array<{
+export function extractToc(html: string): Array<{
   id: string
   text: string
   level: number
 }> {
   const headings: Array<{ id: string; text: string; level: number }> = []
-  const regex = /^(#{1,4})\s+(.+)$/gm
+  const regex = /<h([1-4])[^>]*id="([^"]*)"[^>]*>([\s\S]*?)<\/h[1-4]>/gi
   let match
 
-  while ((match = regex.exec(markdown)) !== null) {
-    const level = match[1].length
-    const text = match[2].trim()
-    const id = text
-      .toLowerCase()
-      .replace(/[^\w一-鿿]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-    headings.push({ id, text, level })
+  while ((match = regex.exec(html)) !== null) {
+    const level = Number(match[1])
+    const id = match[2]
+    const text = match[3].replace(/<[^>]+>/g, "").trim()
+    if (id && text) {
+      headings.push({ id, text, level })
+    }
   }
 
   return headings

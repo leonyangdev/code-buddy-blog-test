@@ -71,10 +71,8 @@ export default async function BlogPostPage({
     )
   }
 
-  const [html, toc] = await Promise.all([
-    markdownToHtml(post.content),
-    Promise.resolve(extractToc(post.content)),
-  ])
+  const html = await markdownToHtml(post.content)
+  const toc = extractToc(html)
 
   const relatedPosts = posts
     .filter((p) => p.category === post.category && p.id !== post.id)
