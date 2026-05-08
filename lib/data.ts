@@ -8,7 +8,7 @@ export const githubProfile = {
   name: "兰亭古墨",
   bio: "高级前端开发工程师 | AI 全栈工程师 | 正在深入学习人工智能",
   location: "ShenZhen, CHINA",
-  avatarUrl: "https://avatars.githubusercontent.com/u/26035866?v=4",
+  avatarUrl: "/avatar.png",
   email: "leonyangdev@gmail.com",
   twitter: "leonyangdev",
   twitterUrl: "https://x.com/leonyangdev",
