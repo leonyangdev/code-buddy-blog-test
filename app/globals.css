@@ -1,26 +1,325 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "../styles/responsive.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-geist-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: 6px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-4xl: 32px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  /* Geist 设计系统配色 — oklch 色彩空间 */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.145 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.145 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.546 0.197 254.1);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.577 0.245 27.3);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.145 0 0);
+  --chart-1: oklch(0.145 0 0);
+  --chart-2: oklch(0.3 0 0);
+  --chart-3: oklch(0.556 0 0);
+  --chart-4: oklch(0.7 0 0);
+  --chart-5: oklch(0.85 0 0);
+  --radius: 6px;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.145 0 0);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.145 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.145 0 0);
+
+  /* 语义化阴影系统 */
+  --shadow-xs: 0 1px 2px oklch(0 0 0 / 0.03);
+  --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.06), 0 1px 2px oklch(0 0 0 / 0.03);
+  --shadow-md: 0 4px 6px oklch(0 0 0 / 0.06), 0 2px 4px oklch(0 0 0 / 0.03);
+  --shadow-lg: 0 8px 24px oklch(0 0 0 / 0.08), 0 2px 8px oklch(0 0 0 / 0.04);
+  --shadow-card-hover: 0 12px 32px oklch(0 0 0 / 0.1), 0 4px 12px oklch(0 0 0 / 0.04);
+
+  /* 间距节奏 (基于 4px 网格) */
+  --space-section: 6rem;
+  --space-block: 3rem;
+  --space-element: 1.5rem;
+  --space-tight: 0.75rem;
+}
+
+.dark {
+  /* Geist 暗色模式配色 — oklch */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.93 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.93 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.93 0 0);
+  --primary: oklch(0.93 0 0);
+  --primary-foreground: oklch(0.145 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.93 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.609 0 0);
+  --accent: oklch(0.623 0.175 254.1);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.577 0.245 27.3);
+  --border: oklch(0.3 0 0);
+  --input: oklch(0.3 0 0);
+  --ring: oklch(0.93 0 0);
+  --chart-1: oklch(0.93 0 0);
+  --chart-2: oklch(0.75 0 0);
+  --chart-3: oklch(0.609 0 0);
+  --chart-4: oklch(0.45 0 0);
+  --chart-5: oklch(0.3 0 0);
+  --sidebar: oklch(0.17 0 0);
+  --sidebar-foreground: oklch(0.93 0 0);
+  --sidebar-primary: oklch(0.93 0 0);
+  --sidebar-primary-foreground: oklch(0.145 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.93 0 0);
+  --sidebar-border: oklch(0.3 0 0);
+  --sidebar-ring: oklch(0.93 0 0);
+
+  --shadow-xs: 0 1px 2px oklch(0 0 0 / 0.15);
+  --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.2), 0 1px 2px oklch(0 0 0 / 0.15);
+  --shadow-md: 0 4px 6px oklch(0 0 0 / 0.2), 0 2px 4px oklch(0 0 0 / 0.15);
+  --shadow-lg: 0 8px 24px oklch(0 0 0 / 0.25), 0 2px 8px oklch(0 0 0 / 0.15);
+  --shadow-card-hover: 0 12px 32px oklch(0 0 0 / 0.3), 0 4px 12px oklch(0 0 0 / 0.15);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Geist 排版系统 */
+@layer components {
+  /* 标题类 */
+  .text-heading-72 {
+    font-size: 4.5rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  .text-heading-64 {
+    font-size: 4rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  .text-heading-56 {
+    font-size: 3.5rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  .text-heading-48 {
+    font-size: 3rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  .text-heading-40 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  .text-heading-32 {
+    font-size: 2rem;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+  .text-heading-24 {
+    font-size: 1.5rem;
+    line-height: 1.33;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+  }
+  .text-heading-20 {
+    font-size: 1.25rem;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+  }
+  .text-heading-16 {
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+  .text-heading-14 {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+
+  /* 正文类 */
+  .text-copy-24 {
+    font-size: 1.5rem;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  .text-copy-20 {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  .text-copy-18 {
+    font-size: 1.125rem;
+    line-height: 1.55;
+    font-weight: 400;
+  }
+  .text-copy-16 {
+    font-size: 1rem;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  .text-copy-14 {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  .text-copy-13 {
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  .text-copy-13-mono {
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    font-weight: 400;
+    font-family: var(--font-geist-mono), monospace;
+  }
+
+  /* 标签类 */
+  .text-label-20 {
+    font-size: 1.25rem;
+    line-height: 1.4;
+    font-weight: 500;
+  }
+  .text-label-18 {
+    font-size: 1.125rem;
+    line-height: 1.4;
+    font-weight: 500;
+  }
+  .text-label-16 {
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+  .text-label-14 {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+  .text-label-14-mono {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    font-weight: 500;
+    font-family: var(--font-geist-mono), monospace;
+  }
+  .text-label-13 {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+  .text-label-13-mono {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    font-weight: 500;
+    font-family: var(--font-geist-mono), monospace;
+  }
+  .text-label-12 {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+  .text-label-12-mono {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    font-weight: 500;
+    font-family: var(--font-geist-mono), monospace;
+  }
+
+  /* 按钮类 */
+  .text-button-16 {
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+  .text-button-14 {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+  .text-button-12 {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
