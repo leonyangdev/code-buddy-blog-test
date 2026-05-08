@@ -1,16 +1,24 @@
 "use client"
 
-import { useState } from "react"
-import Link from "next/link"
+import { useState, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import { buttonVariants } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { Search, X } from "lucide-react"
 import { posts } from "@/lib/data"
 import { PostCard } from "@/components/blog/post-card"
 
 export default function SearchPage() {
-  const [query, setQuery] = useState("")
+  const searchParams = useSearchParams()
+  const initialQuery = searchParams.get("q") || ""
+
+  const [query, setQuery] = useState(initialQuery)
   const [searchResults, setSearchResults] = useState<typeof posts>([])
+
+  useEffect(() => {
+    if (initialQuery) {
+      handleSearch(initialQuery)
+    }
+  }, [initialQuery])
 
   const handleSearch = (searchQuery: string) => {
     setQuery(searchQuery)
@@ -43,7 +51,7 @@ export default function SearchPage() {
         </p>
       </div>
 
-      {/* 搜索框 */}
+      {/* Search input */}
       <div className="relative">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
         <input
@@ -51,7 +59,8 @@ export default function SearchPage() {
           value={query}
           onChange={(e) => handleSearch(e.target.value)}
           placeholder="输入关键词搜索..."
-          className="w-full h-12 pl-12 pr-12 text-copy-18 rounded-xl bg-muted placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 transition-shadow duration-150"
+          autoFocus
+          className="w-full h-12 pl-12 pr-12 text-copy-18 rounded-xl border border-border bg-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 transition-shadow duration-150"
         />
         {query && (
           <button
@@ -63,7 +72,7 @@ export default function SearchPage() {
         )}
       </div>
 
-      {/* 搜索结果 */}
+      {/* Results */}
       {query && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -74,17 +83,15 @@ export default function SearchPage() {
           </div>
 
           {searchResults.length === 0 ? (
-            <Card variant="ghost">
-              <CardContent className="py-12 text-center">
-                <Search className="size-12 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-label-16 mb-2">未找到相关文章</h3>
-                <p className="text-copy-14 text-muted-foreground">
-                  尝试使用不同的关键词搜索
-                </p>
-              </CardContent>
-            </Card>
+            <div className="py-12 text-center space-y-3">
+              <Search className="size-10 mx-auto text-muted-foreground" />
+              <h3 className="text-label-16">未找到相关文章</h3>
+              <p className="text-copy-14 text-muted-foreground">
+                尝试使用不同的关键词搜索
+              </p>
+            </div>
           ) : (
-            <div className="space-y-4">
+            <div>
               {searchResults.map((post) => (
                 <PostCard key={post.id} post={post} />
               ))}
@@ -93,20 +100,22 @@ export default function SearchPage() {
         </div>
       )}
 
-      {/* 热门搜索 */}
+      {/* Hot tags */}
       {!query && (
         <div className="space-y-4">
           <h2 className="text-heading-20 text-foreground">热门搜索</h2>
           <div className="flex flex-wrap gap-2">
-            {["Next.js", "React", "TypeScript", "Tailwind CSS", "性能优化", "用户体验"].map((tag) => (
-              <button
-                key={tag}
-                onClick={() => handleSearch(tag)}
-                className={buttonVariants({ variant: "outline" })}
-              >
-                {tag}
-              </button>
-            ))}
+            {["Next.js", "React", "TypeScript", "Tailwind CSS", "性能优化", "用户体验"].map(
+              (tag) => (
+                <button
+                  key={tag}
+                  onClick={() => handleSearch(tag)}
+                  className={buttonVariants({ variant: "outline" })}
+                >
+                  {tag}
+                </button>
+              )
+            )}
           </div>
         </div>
       )}

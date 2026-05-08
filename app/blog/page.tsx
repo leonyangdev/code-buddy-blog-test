@@ -1,10 +1,8 @@
 import type { Metadata } from "next"
-import Link from "next/link"
-import { buttonVariants } from "@/components/ui/button"
-import { Search } from "lucide-react"
 import { posts, categories, tags } from "@/lib/data"
 import { Sidebar } from "@/components/layout/sidebar"
 import { PostCard } from "@/components/blog/post-card"
+import { BlogSearch } from "@/components/blog/blog-search"
 
 export const metadata: Metadata = {
   title: "博客文章",
@@ -26,18 +24,12 @@ export default function BlogPage() {
         </p>
       </div>
 
-      {/* Search shortcut */}
-      <Link
-        href="/search"
-        className="flex items-center gap-3 h-10 px-4 rounded-lg bg-muted text-muted-foreground text-copy-14 hover:bg-muted/80 transition-colors duration-150"
-      >
-        <Search className="size-4" />
-        搜索文章...
-      </Link>
+      {/* Inline search */}
+      <BlogSearch />
 
       {/* Main content */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8">
-        <div className="space-y-4">
+        <div>
           {sortedPosts.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}
