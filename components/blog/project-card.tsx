@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Globe, ArrowUpRight } from "lucide-react"
+import { ExternalLink, Globe, Star, ArrowUpRight } from "lucide-react"
 
 interface ProjectCardProps {
   project: {
@@ -11,6 +11,7 @@ interface ProjectCardProps {
     tags: string[]
     github: string
     demo: string
+    stars?: number
     featured?: boolean
   }
 }
@@ -30,13 +31,16 @@ export function ProjectCard({ project }: ProjectCardProps) {
             精选
           </Badge>
         )}
+        {project.stars && project.stars > 0 && (
+          <span className="flex items-center gap-1 text-label-11 text-muted-foreground">
+            <Star className="size-3" />
+            <span className="tabular-nums">{project.stars}</span>
+          </span>
+        )}
       </div>
 
       {/* Title */}
-      <Link
-        href={`/projects/${project.id}`}
-        className="block mb-1.5"
-      >
+      <Link href={`/projects/${project.id}`} className="block mb-1.5">
         <h3 className="text-heading-18 md:text-heading-20 text-foreground group-hover:text-accent transition-colors duration-150 flex items-start gap-2">
           <span className="flex-1">{project.title}</span>
           <ArrowUpRight className="size-4 mt-1 shrink-0 opacity-0 -translate-y-1 translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 text-accent" />
@@ -59,15 +63,17 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <Globe className="size-3.5" />
           GitHub
         </Link>
-        <Link
-          href={project.demo}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={buttonVariants({ size: "sm" }) + " gap-1.5"}
-        >
-          <ExternalLink className="size-3.5" />
-          演示
-        </Link>
+        {project.demo && (
+          <Link
+            href={project.demo}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonVariants({ size: "sm" }) + " gap-1.5"}
+          >
+            <ExternalLink className="size-3.5" />
+            演示
+          </Link>
+        )}
       </div>
     </div>
   )

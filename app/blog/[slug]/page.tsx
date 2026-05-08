@@ -97,9 +97,9 @@ export default async function BlogPostPage({
 
       {/* Content grid */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-8">
-        <div className="space-y-8">
+        <div className="space-y-8 min-w-0">
           {/* Article body */}
-          <article className="rounded-xl bg-card p-6 md:p-8 ring-1 ring-foreground/10">
+          <article className="rounded-xl bg-card p-6 md:p-8 ring-1 ring-foreground/10 overflow-hidden">
             <MarkdownContent html={html} />
           </article>
 

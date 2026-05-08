@@ -2,39 +2,28 @@
 
 import { useEffect, useRef } from "react"
 
-/**
- * Giscus 评论组件属性
- */
 interface GiscusProps {
-  /** GitHub 仓库名称，格式：owner/repo */
   repo: string
-  /** GitHub Discussions 的 ID */
   repoId: string
-  /** 文章的分类名称 */
   category: string
-  /** 分类的 ID */
   categoryId: string
-  /** 文章的唯一标识符 */
-  mapping: "pathname" | "url" | "title" | "og:title"
-  /** 是否启用严格匹配 */
+  mapping?: "pathname" | "url" | "title" | "og:title"
   strict?: boolean
-  /** 是否启用 reactions */
   reactionsEnabled?: boolean
-  /** 是否发送元数据 */
   emitMetadata?: boolean
-  /** 输入框的位置 */
   inputPosition?: "top" | "bottom"
-  /** 主题 */
-  theme?: "light" | "dark" | "preferred_color_scheme" | "transparent_dark" | "custom"
-  /** 语言 */
+  theme?: string
   lang?: string
-  /** 自定义类名 */
   className?: string
 }
 
 /**
  * Giscus 评论组件
- * 基于 GitHub Discussions 的评论系统
+ * 基于 GitHub Discussions 的评论系统，最适合 Next.js 技术博客：
+ * - 与 GitHub 生态无缝集成
+ * - 支持暗色模式自动切换
+ * - 无需额外后端服务
+ * - 开发者友好的讨论体验
  */
 export function Giscus({
   repo,
@@ -55,10 +44,8 @@ export function Giscus({
   useEffect(() => {
     if (!containerRef.current) return
 
-    // 清除之前的内容
     containerRef.current.innerHTML = ""
 
-    // 创建 script 元素
     const script = document.createElement("script")
     script.src = "https://giscus.app/client.js"
     script.setAttribute("data-repo", repo)
@@ -75,42 +62,75 @@ export function Giscus({
     script.setAttribute("crossorigin", "anonymous")
     script.async = true
 
-    // 添加到容器
     containerRef.current.appendChild(script)
 
-    // 清理函数
     return () => {
       if (containerRef.current) {
         containerRef.current.innerHTML = ""
       }
     }
-  }, [repo, repoId, category, categoryId, mapping, strict, reactionsEnabled, emitMetadata, inputPosition, theme, lang])
+  }, [
+    repo,
+    repoId,
+    category,
+    categoryId,
+    mapping,
+    strict,
+    reactionsEnabled,
+    emitMetadata,
+    inputPosition,
+    theme,
+    lang,
+  ])
 
   return (
     <div
       ref={containerRef}
-      className={`giscus ${className}`}
+      className={`giscus rounded-xl overflow-hidden ${className}`}
       style={{ minHeight: "200px" }}
     />
   )
 }
 
 /**
- * Giscus 评论组件（简化版）
- * 使用默认配置的 Giscus 评论组件
+ * 博客评论组件
+ * 使用 Giscus 作为评论系统后端
+ *
+ * 配置步骤：
+ * 1. 访问 https://giscus.app/zh-CN
+ * 2. 输入你的 GitHub 仓库名（需要启用 Discussions）
+ * 3. 选择分类和映射方式
+ * 4. 复制生成的 repoId 和 categoryId
+ * 5. 更新下方配置
  */
 export function BlogComments({ className = "" }: { className?: string }) {
-  // 这些配置需要用户根据自己的 GitHub 仓库进行修改
+  // TODO: 替换为你的 Giscus 配置
+  // 访问 https://giscus.app 获取配置
   const config = {
-    repo: "your-username/your-repo" as `${string}/${string}`,
-    repoId: "your-repo-id",
+    repo: "leonyangdev/code-buddy-blog-test" as `${string}/${string}`,
+    repoId: "", // 从 giscus.app 获取
     category: "Announcements",
-    categoryId: "your-category-id",
+    categoryId: "", // 从 giscus.app 获取
+  }
+
+  // 如果没有配置，显示提示信息
+  if (!config.repoId) {
+    return (
+      <div
+        className={`rounded-xl border border-border p-8 text-center ${className}`}
+      >
+        <p className="text-copy-14 text-muted-foreground mb-2">
+          评论功能正在配置中
+        </p>
+        <p className="text-label-12 text-muted-foreground/60">
+          基于 GitHub Discussions 的评论系统即将上线
+        </p>
+      </div>
+    )
   }
 
   return (
     <div className={className}>
-      <h3 className="text-lg font-semibold mb-4">评论</h3>
       <Giscus
         repo={config.repo}
         repoId={config.repoId}

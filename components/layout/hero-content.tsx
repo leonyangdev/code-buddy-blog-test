@@ -13,7 +13,10 @@ export function HeroContent() {
     const container = containerRef.current
     if (!container) return
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches
+
     const els = {
       badge: container.querySelector("[data-anim=badge]"),
       title: container.querySelector("[data-anim=title]"),
@@ -22,22 +25,36 @@ export function HeroContent() {
       stats: container.querySelectorAll("[data-anim=stat]"),
     }
 
+    const allElements = [
+      els.badge,
+      els.title,
+      els.subtitle,
+      ...Array.from(els.cta),
+      ...Array.from(els.stats),
+    ].filter(Boolean)
+
     if (reducedMotion) {
-      gsap.set([els.badge, els.title, els.subtitle, ...els.cta, ...els.stats], {
-        opacity: 1,
-        y: 0,
-      })
+      gsap.set(allElements, { opacity: 1, y: 0 })
       return
     }
 
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
+    // Set initial state
+    gsap.set(allElements, { opacity: 0, y: 20 })
 
-      tl.from(els.badge, { opacity: 0, y: 16, duration: 0.5 })
-        .from(els.title, { opacity: 0, y: 24, duration: 0.6 }, "-=0.3")
-        .from(els.subtitle, { opacity: 0, y: 16, duration: 0.5 }, "-=0.35")
-        .from(els.cta, { opacity: 0, y: 16, duration: 0.4, stagger: 0.08 }, "-=0.3")
-        .from(els.stats, { opacity: 0, y: 12, duration: 0.4, stagger: 0.06 }, "-=0.2")
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        defaults: { ease: "power3.out" },
+        onComplete: () => {
+          // Ensure final state is maintained
+          gsap.set(allElements, { opacity: 1, y: 0 })
+        },
+      })
+
+      tl.to(els.badge, { opacity: 1, y: 0, duration: 0.5 })
+        .to(els.title, { opacity: 1, y: 0, duration: 0.6 }, "-=0.3")
+        .to(els.subtitle, { opacity: 1, y: 0, duration: 0.5 }, "-=0.35")
+        .to(els.cta, { opacity: 1, y: 0, duration: 0.4, stagger: 0.08 }, "-=0.3")
+        .to(els.stats, { opacity: 1, y: 0, duration: 0.4, stagger: 0.06 }, "-=0.2")
     }, container)
 
     return () => ctx.revert()
@@ -54,9 +71,7 @@ export function HeroContent() {
         className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border bg-background/60 backdrop-blur-sm mb-8"
       >
         <span className="size-1.5 rounded-full bg-accent animate-pulse" />
-        <span className="text-label-13 text-muted-foreground">
-          持续更新中
-        </span>
+        <span className="text-label-13 text-muted-foreground">持续更新中</span>
       </div>
 
       {/* Main heading */}
