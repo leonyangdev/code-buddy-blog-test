@@ -16,7 +16,7 @@ import {
   Menu,
   X,
 } from "lucide-react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { cn } from "@/lib/utils"
 
 export function Header() {
@@ -25,12 +25,13 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
+  // Initialize theme from localStorage or system preference
   useEffect(() => {
-    const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
-    setIsDark(document.documentElement.classList.contains("dark") || darkModeMediaQuery.matches)
-    const handler = (e: MediaQueryListEvent) => setIsDark(e.matches)
-    darkModeMediaQuery.addEventListener("change", handler)
-    return () => darkModeMediaQuery.removeEventListener("change", handler)
+    const stored = localStorage.getItem("theme")
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+    const dark = stored ? stored === "dark" : prefersDark
+    setIsDark(dark)
+    document.documentElement.classList.toggle("dark", dark)
   }, [])
 
   useEffect(() => {
@@ -39,10 +40,14 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  const toggleTheme = () => {
-    setIsDark(!isDark)
-    document.documentElement.classList.toggle("dark")
-  }
+  const toggleTheme = useCallback(() => {
+    setIsDark((prev) => {
+      const next = !prev
+      document.documentElement.classList.toggle("dark", next)
+      localStorage.setItem("theme", next ? "dark" : "light")
+      return next
+    })
+  }, [])
 
   const navLinks = [
     { href: "/", label: "首页", icon: Home },
@@ -67,10 +72,7 @@ export function Header() {
       )}
     >
       <div className="container mx-auto flex h-14 items-center justify-between px-4 md:px-6">
-        <Link
-          href="/"
-          className="flex items-center gap-2 group"
-        >
+        <Link href="/" className="flex items-center gap-2 group">
           <Avatar className="size-7 transition-transform duration-200 group-hover:scale-105">
             <AvatarFallback className="text-label-12 bg-accent/10 text-accent">
               B
@@ -132,11 +134,7 @@ export function Header() {
             aria-expanded={isMenuOpen}
             aria-label={isMenuOpen ? "关闭菜单" : "打开菜单"}
           >
-            {isMenuOpen ? (
-              <X className="size-4" />
-            ) : (
-              <Menu className="size-4" />
-            )}
+            {isMenuOpen ? <X className="size-4" /> : <Menu className="size-4" />}
           </Button>
         </div>
       </div>

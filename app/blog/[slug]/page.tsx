@@ -7,7 +7,6 @@ import {
   Eye,
   Calendar,
   Tag,
-  Share2,
   Bookmark,
 } from "lucide-react"
 import { posts } from "@/lib/data"
@@ -18,6 +17,7 @@ import { ArticleJsonLd } from "@/components/seo/json-ld"
 import { MarkdownContent } from "@/components/blog/markdown-content"
 import { TableOfContents } from "@/components/blog/table-of-contents"
 import { ReadingProgress } from "@/components/blog/reading-progress"
+import { ShareButton } from "@/components/blog/share-button"
 import { markdownToHtml, extractToc } from "@/lib/markdown"
 
 export default async function BlogPostPage({
@@ -120,10 +120,7 @@ export default async function BlogPostPage({
 
           {/* Share and bookmark */}
           <div className="flex items-center gap-4">
-            <button className="flex items-center gap-1.5 text-label-14 text-muted-foreground hover:text-foreground transition-colors duration-150">
-              <Share2 className="size-4" />
-              分享文章
-            </button>
+            <ShareButton title={post.title} />
             <button className="flex items-center gap-1.5 text-label-14 text-muted-foreground hover:text-foreground transition-colors duration-150">
               <Bookmark className="size-4" />
               收藏文章
