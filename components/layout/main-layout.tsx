@@ -2,6 +2,7 @@
 
 import { Header } from "./header"
 import { Footer } from "./footer"
+import { ScrollToTop } from "@/components/ui/scroll-to-top"
 import { usePathname } from "next/navigation"
 
 interface MainLayoutProps {
@@ -42,6 +43,7 @@ export function MainLayout({
       </main>
 
       <Footer />
+      <ScrollToTop />
     </div>
   )
 }

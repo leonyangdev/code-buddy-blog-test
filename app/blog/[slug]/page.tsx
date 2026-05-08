@@ -17,6 +17,7 @@ import { PostCard } from "@/components/blog/post-card"
 import { ArticleJsonLd } from "@/components/seo/json-ld"
 import { MarkdownContent } from "@/components/blog/markdown-content"
 import { TableOfContents } from "@/components/blog/table-of-contents"
+import { ReadingProgress } from "@/components/blog/reading-progress"
 import { markdownToHtml, extractToc } from "@/lib/markdown"
 
 export default async function BlogPostPage({
@@ -50,6 +51,7 @@ export default async function BlogPostPage({
 
   return (
     <div className="space-y-8">
+      <ReadingProgress />
       <ArticleJsonLd
         title={post.title}
         description={post.excerpt}
