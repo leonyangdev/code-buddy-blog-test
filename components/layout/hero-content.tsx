@@ -89,7 +89,7 @@ export function HeroContent() {
         data-anim="subtitle"
         className="text-copy-18 md:text-copy-20 text-muted-foreground max-w-xl mx-auto mb-10"
       >
-        专注于 Web 开发、前端工程化和用户体验设计
+        从 9 年前端经验出发，探索 AI 全栈的无限可能
       </p>
 
       {/* CTAs */}
@@ -118,10 +118,10 @@ export function HeroContent() {
       {/* Stats row */}
       <div className="flex justify-center gap-8 md:gap-12">
         {[
-          { value: "50+", label: "文章" },
-          { value: "10+", label: "项目" },
-          { value: "20+", label: "技术栈" },
-          { value: "1K+", label: "读者" },
+          { value: "9+", label: "年经验" },
+          { value: "150+", label: "仓库" },
+          { value: "600+", label: "Stars" },
+          { value: "AI", label: "全栈" },
         ].map((stat) => (
           <div key={stat.label} data-anim="stat" className="text-center">
             <div className="text-heading-24 md:text-heading-32 text-foreground tabular-nums">

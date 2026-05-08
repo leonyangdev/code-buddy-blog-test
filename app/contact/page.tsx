@@ -212,8 +212,8 @@ export default function ContactPage() {
             <CardContent>
               <div className="space-y-4">
                 {[
-                  { icon: Mail, label: "邮箱", value: "hello@example.com" },
-                  { icon: MapPin, label: "位置", value: "中国" },
+                  { icon: Mail, label: "邮箱", value: githubProfile.email },
+                  { icon: MapPin, label: "位置", value: githubProfile.location },
                   {
                     icon: Clock,
                     label: "工作时间",

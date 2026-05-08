@@ -137,7 +137,7 @@ export function Sidebar({
             </div>
           </div>
           <p className="text-copy-13 text-muted-foreground leading-relaxed">
-            Front-End Expert | Full-Stack Developer | Currently Learning AI
+            高级前端工程师 | AI 全栈工程师 | 探索人工智能
           </p>
           <Link
             href="/about"

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     template: `%s | ${githubProfile.name}`,
   },
   description:
-    "一个优雅精致的技术博客，分享 Web 开发、前端工程化和用户体验设计的最新见解和实践经验。",
+    "一个关于 AI 全栈工程师的技术博客，分享 Python、人工智能、LLM、RAG 和前端开发的学习笔记和实践经验。",
   keywords: [
     "技术博客",
     "Web 开发",

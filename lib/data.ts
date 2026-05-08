@@ -6,255 +6,431 @@
 export const githubProfile = {
   username: "leonyangdev",
   name: "兰亭古墨",
-  bio: "Front-End Expert | Full-Stack Developer | Currently Learning AI | Husband & Father",
+  bio: "高级前端开发工程师 | AI 全栈工程师 | 正在深入学习人工智能",
   location: "ShenZhen, CHINA",
   avatarUrl: "https://avatars.githubusercontent.com/u/26035866?v=4",
+  email: "leonyangdev@gmail.com",
   twitter: "leonyangdev",
+  twitterUrl: "https://x.com/leonyangdev",
   githubUrl: "https://github.com/leonyangdev",
   publicRepos: 152,
   followers: 18,
   following: 71,
   totalStars: 597,
   memberSince: "2017",
+  education: {
+    school: "东华理工大学",
+    major: "环境工程",
+    degree: "本科",
+  },
+  yearsOfExperience: 9,
 }
 
 export const posts = [
   {
     id: 1,
-    title: "Next.js 16 新特性解析：App Router 的全面升级",
-    slug: "nextjs-16-app-router-upgrade",
-    excerpt: "深入探讨 Next.js 16 带来的 App Router 改进，包括性能优化、开发体验提升和新的 API 设计。",
-    content: `# Next.js 16 新特性解析
+    title: "从零开始学 Python：前端工程师的 AI 转型之路",
+    slug: "python-for-frontend-engineers-ai-transition",
+    excerpt: "作为一个有 9 年经验的前端工程师，分享我学习 Python 和转向 AI 领域的心路历程和实践经验。",
+    content: `# 从零开始学 Python：前端工程师的 AI 转型之路
 
-Next.js 16 带来了许多令人兴奋的新特性，让我们一起来深入了解。
+作为一个有 9 年经验的前端开发工程师，我决定将职业方向转向 AI 全栈。这篇文章记录我的学习路径。
 
-## App Router 改进
+## 为什么选择 Python？
 
-App Router 在这一版本中得到了全面的升级，主要体现在以下几个方面：
+\`\`\`python
+# Python 的简洁语法让我想起了 JavaScript 的优雅
+def greet(name: str) -> str:
+    return f"Hello, {name}! Welcome to AI world."
 
-### 性能优化
-
-- **更快的页面加载**：通过改进的代码分割策略
-- **更小的客户端包体积**：Tree-shaking 优化
-- **更好的缓存策略**：增量式静态再生（ISR）改进
-
-### 开发体验
-
-\`\`\`typescript
-// 新的路由定义方式
-export default function Page() {
-  return <div>Hello World</div>
-}
-
-// 动态路由
-export async function generateStaticParams() {
-  return [{ slug: 'hello' }, { slug: 'world' }]
-}
+print(greet("Developer"))
 \`\`\`
 
-### 新的 API 设计
+## 前端工程师的优势
 
-> Next.js 16 引入了全新的 \`after\` API，允许在响应发送后执行操作。
+- **工程化思维**：模块化、组件化的思想同样适用于 ML 项目
+- **调试能力**：Chrome DevTools 的经验帮助我理解 Python 调试
+- **API 设计**：前后端分离的经验对构建 AI 服务很有帮助
 
-| 特性 | 描述 | 状态 |
-|------|------|------|
-| after API | 响应后执行 | ✅ 稳定 |
-| PPR | 部分预渲染 | ✅ 稳定 |
-| Turbopack | 构建工具 | 🔄 测试中 |
+## 学习路线
 
-## 总结
+1. Python 基础语法和数据结构
+2. NumPy 和 Pandas 数据处理
+3. 机器学习基础概念
+4. 深度学习框架（PyTorch）
+5. LLM 应用开发（LangChain、RAG）
 
-Next.js 16 是一个重要的版本更新，带来了显著的性能提升和开发体验改进。
-
----
-
-**推荐阅读**：[官方升级指南](https://nextjs.org/docs)
+> 转型不是放弃过去，而是在已有基础上扩展新的能力。
 `,
-    category: "前端框架",
-    tags: ["Next.js", "React", "前端开发"],
+    category: "AI 学习",
+    tags: ["Python", "AI", "职业转型"],
     date: "2026-05-08",
-    readTime: "8 分钟",
-    views: 1250,
+    readTime: "10 分钟",
+    views: 2850,
     featured: true,
   },
   {
     id: 2,
-    title: "Tailwind CSS 4.0 实战：构建现代化 UI 组件",
-    slug: "tailwindcss-4-modern-ui-components",
-    excerpt: "学习如何使用 Tailwind CSS 4.0 的新功能来构建美观、响应式的用户界面组件。",
-    content: `# Tailwind CSS 4.0 实战
+    title: "LangChain 实战：构建你的第一个 RAG 应用",
+    slug: "langchain-rag-tutorial",
+    excerpt: "手把手教你使用 LangChain 构建检索增强生成（RAG）应用，从文档加载到智能问答。",
+    content: `# LangChain 实战：构建你的第一个 RAG 应用
 
-Tailwind CSS 4.0 引入了革命性的变化，让样式编写更加高效。
+RAG（Retrieval-Augmented Generation）是当前最实用的 LLM 应用模式之一。
 
-## CSS-first 配置
+## 什么是 RAG？
 
-\`\`\`css
-@import "tailwindcss";
+RAG 结合了检索和生成两个步骤：
+1. 从知识库中检索相关文档
+2. 将检索结果作为上下文传递给 LLM
+3. LLM 基于上下文生成回答
 
-@theme inline {
-  --color-primary: oklch(0.546 0.197 254.1);
-  --color-background: oklch(1 0 0);
-  --font-sans: var(--font-geist-sans);
-}
+\`\`\`python
+from langchain_community.document_loaders import TextLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import FAISS
+from langchain_openai import OpenAIEmbeddings
+
+# 加载文档
+loader = TextLoader("knowledge.txt")
+documents = loader.load()
+
+# 文本分割
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
+    chunk_overlap=200
+)
+docs = text_splitter.split_documents(documents)
+
+# 创建向量数据库
+vectorstore = FAISS.from_documents(docs, OpenAIEmbeddings())
 \`\`\`
 
-## 新特性一览
+## 关键组件
 
-1. **原生 CSS 变量支持**：不再需要 JavaScript 配置
-2. **改进的 IDE 支持**：更好的自动补全和类型检查
-3. **更快的编译速度**：基于 Rust 的引擎
+| 组件 | 作用 | 常用选择 |
+|------|------|----------|
+| Document Loader | 加载数据源 | TextLoader, PDFLoader |
+| Text Splitter | 分割文本 | RecursiveCharacterTextSplitter |
+| Embeddings | 文本向量化 | OpenAI, HuggingFace |
+| Vector Store | 存储向量 | FAISS, Chroma, Pinecone |
 
-## 数学公式支持
+## 实际应用场景
 
-行内公式：$E = mc^2$
+- 企业知识库问答
+- 文档智能助手
+- 客服自动化
+- 技术文档搜索
 
-块级公式：
-
-$$
-\\frac{n!}{k!(n-k)!} = \\binom{n}{k}
-$$
+> RAG 让 LLM 能够基于最新、最准确的信息回答问题。
 `,
-    category: "CSS 框架",
-    tags: ["Tailwind CSS", "CSS", "UI 设计"],
+    category: "AI 应用",
+    tags: ["LangChain", "RAG", "Python", "LLM"],
     date: "2026-05-05",
-    readTime: "12 分钟",
-    views: 980,
+    readTime: "15 分钟",
+    views: 3200,
     featured: true,
   },
   {
     id: 3,
-    title: "TypeScript 6.0 类型系统深入解析",
-    slug: "typescript-6-type-system-deep-dive",
-    excerpt: "探索 TypeScript 6.0 中强大的类型系统特性，包括条件类型、映射类型和模板字面量类型。",
-    content: `# TypeScript 6.0 类型系统深入解析
+    title: "NumPy 入门指南：AI 工程师必备的数据处理基础",
+    slug: "numpy-basics-for-ai-engineers",
+    excerpt: "掌握 NumPy 的核心概念和常用操作，为深度学习打下坚实的数据处理基础。",
+    content: `# NumPy 入门指南：AI 工程师必备的数据处理基础
 
-TypeScript 6.0 的类型系统更加完善。
+NumPy 是 Python 科学计算的基础库，也是学习机器学习的必经之路。
 
-## 条件类型
+## 为什么需要 NumPy？
 
-\`\`\`typescript
-type IsString<T> = T extends string ? true : false
-type A = IsString<"hello"> // true
-type B = IsString<42>      // false
+\`\`\`python
+import numpy as np
+
+# Python 列表 vs NumPy 数组
+python_list = [1, 2, 3, 4, 5]
+numpy_array = np.array([1, 2, 3, 4, 5])
+
+# NumPy 的优势：向量化操作
+result = numpy_array * 2  # [2, 4, 6, 8, 10]
 \`\`\`
 
-## 模板字面量类型
+## 核心概念
 
-\`\`\`typescript
-type EventName<T extends string> = \`on\${Capitalize<T>}\`
-type ClickEvent = EventName<"click"> // "onClick"
+### 数组创建
+
+\`\`\`python
+# 常用创建方式
+zeros = np.zeros((3, 4))
+ones = np.ones((2, 3))
+random = np.random.randn(3, 3)
+arange = np.arange(0, 10, 2)
+linspace = np.linspace(0, 1, 5)
 \`\`\`
+
+### 数组操作
+
+\`\`\`python
+# 形状操作
+arr = np.array([[1, 2, 3], [4, 5, 6]])
+print(arr.shape)      # (2, 3)
+print(arr.reshape(3, 2))  # 改变形状
+print(arr.T)           # 转置
+\`\`\`
+
+### 数学运算
+
+\`\`\`python
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+
+print(np.dot(a, b))    # 点积: 32
+print(np.cross(a, b))  # 叉积
+print(np.sum(a))       # 求和: 6
+print(np.mean(a))      # 平均值: 2.0
+\`\`\`
+
+## 与深度学习的关系
+
+NumPy 的数组操作思想直接延伸到 PyTorch 的 Tensor 操作：
+
+\`\`\`python
+import torch
+
+# NumPy 到 PyTorch
+np_array = np.array([1, 2, 3])
+torch_tensor = torch.from_numpy(np_array)
+\`\`\`
+
+> 掌握 NumPy，就掌握了 AI 数据处理的通用语言。
 `,
-    category: "编程语言",
-    tags: ["TypeScript", "类型系统", "JavaScript"],
+    category: "AI 基础",
+    tags: ["NumPy", "Python", "数据处理", "AI"],
     date: "2026-05-02",
-    readTime: "15 分钟",
-    views: 1560,
+    readTime: "12 分钟",
+    views: 1890,
     featured: false,
   },
   {
     id: 4,
-    title: "React Server Components 最佳实践",
-    slug: "react-server-components-best-practices",
-    excerpt: "掌握 React Server Components 的使用技巧，提升应用性能和用户体验。",
-    content: `# React Server Components 最佳实践
+    title: "Transformer 架构详解：从 Attention 到 GPT",
+    slug: "transformer-architecture-deep-dive",
+    excerpt: "深入理解 Transformer 架构的核心原理，包括 Self-Attention、Multi-Head Attention 和位置编码。",
+    content: `# Transformer 架构详解：从 Attention 到 GPT
 
-React Server Components 改变了我们构建应用的方式。
+Transformer 是现代 AI 的基石，理解它对于学习 LLM 至关重要。
 
-## 什么是 RSC？
+## Self-Attention 机制
 
-Server Components 在服务器上运行，可以直接访问数据库和文件系统。
+\`\`\`python
+import torch
+import torch.nn.functional as F
 
-\`\`\`tsx
-async function UserProfile({ userId }: { userId: string }) {
-  const user = await db.user.findById(userId)
-  return (
-    <div>
-      <h1>{user.name}</h1>
-      <p>{user.bio}</p>
-    </div>
-  )
-}
+def self_attention(Q, K, V):
+    # 计算注意力分数
+    d_k = Q.size(-1)
+    scores = torch.matmul(Q, K.transpose(-2, -1)) / torch.sqrt(torch.tensor(d_k, dtype=torch.float32))
+
+    # Softmax 归一化
+    attention_weights = F.softmax(scores, dim=-1)
+
+    # 加权求和
+    output = torch.matmul(attention_weights, V)
+    return output, attention_weights
 \`\`\`
 
-## 关键原则
+## Multi-Head Attention
 
-1. **默认使用 Server Components**：减少客户端 JavaScript
-2. **最小化 Client Components**：只在需要交互时使用
-3. **合理使用 Suspense**：优化加载体验
+\`\`\`python
+class MultiHeadAttention(torch.nn.Module):
+    def __init__(self, d_model, num_heads):
+        super().__init__()
+        self.num_heads = num_heads
+        self.d_k = d_model // num_heads
+
+        self.W_q = torch.nn.Linear(d_model, d_model)
+        self.W_k = torch.nn.Linear(d_model, d_model)
+        self.W_v = torch.nn.Linear(d_model, d_model)
+        self.W_o = torch.nn.Linear(d_model, d_model)
+
+    def forward(self, Q, K, V):
+        batch_size = Q.size(0)
+
+        # 线性变换并分头
+        Q = self.W_q(Q).view(batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)
+        K = self.W_k(K).view(batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)
+        V = self.W_v(V).view(batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)
+
+        # 计算注意力
+        attn_output, _ = self_attention(Q, K, V)
+
+        # 拼接并输出
+        attn_output = attn_output.transpose(1, 2).contiguous().view(batch_size, -1, self.num_heads * self.d_k)
+        return self.W_o(attn_output)
+\`\`\`
+
+## 关键创新
+
+1. **并行计算**：相比 RNN，Transformer 可以并行处理序列
+2. **长距离依赖**：Attention 机制直接建立任意位置间的连接
+3. **位置编码**：通过位置编码保留序列顺序信息
+
+> Transformer 的出现，开启了大语言模型的新时代。
 `,
-    category: "前端框架",
-    tags: ["React", "Server Components", "性能优化"],
+    category: "深度学习",
+    tags: ["Transformer", "Attention", "深度学习", "NLP"],
     date: "2026-04-28",
-    readTime: "10 分钟",
-    views: 890,
-    featured: false,
+    readTime: "20 分钟",
+    views: 4560,
+    featured: true,
   },
   {
     id: 5,
-    title: "Web 性能优化：从理论到实践",
-    slug: "web-performance-optimization-theory-to-practice",
-    excerpt: "全面的 Web 性能优化指南，涵盖加载性能、运行时性能和用户体验优化。",
-    content: `# Web 性能优化：从理论到实践
+    title: "Agentic RAG：下一代智能检索系统",
+    slug: "agentic-rag-next-gen-retrieval",
+    excerpt: "探索 Agentic RAG 的设计理念和实现方式，让 AI Agent 自主决定何时、如何检索信息。",
+    content: `# Agentic RAG：下一代智能检索系统
 
-性能优化是 Web 开发的重要课题。
+传统 RAG 是"检索-生成"的固定流程，而 Agentic RAG 让 AI Agent 自主决策。
 
-## Core Web Vitals
+## 传统 RAG 的局限
 
-- **LCP**（Largest Contentful Paint）
-- **FID**（First Input Delay）
-- **CLS**（Cumulative Layout Shift）
+- 固定的检索策略
+- 无法处理复杂查询
+- 缺乏推理和规划能力
 
-## 优化策略
+## Agentic RAG 架构
 
-\`\`\`javascript
-// 预加载关键资源
-const link = document.createElement('link')
-link.rel = 'preload'
-link.as = 'image'
-link.href = '/hero.webp'
-document.head.appendChild(link)
+\`\`\`python
+from langchain.agents import AgentExecutor, create_openai_tools_agent
+from langchain.tools import Tool
+from langchain_openai import ChatOpenAI
+
+# 定义工具
+tools = [
+    Tool(
+        name="search_knowledge_base",
+        func=search_vectorstore,
+        description="搜索知识库获取相关信息"
+    ),
+    Tool(
+        name="query_database",
+        func=query_sql_db,
+        description="查询数据库获取结构化数据"
+    ),
+    Tool(
+        name="call_api",
+        func=call_external_api,
+        description="调用外部 API 获取实时信息"
+    ),
+]
+
+# 创建 Agent
+llm = ChatOpenAI(model="gpt-4")
+agent = create_openai_tools_agent(llm, tools, prompt)
+agent_executor = AgentExecutor(agent=agent, tools=tools)
+
+# Agent 自主决策
+result = agent_executor.invoke({
+    "input": "分析最近一个月的销售趋势并给出建议"
+})
 \`\`\`
 
-> 好的性能不是一次性的工作，而是持续的过程。
+## 关键特性
+
+| 特性 | 传统 RAG | Agentic RAG |
+|------|----------|-------------|
+| 检索策略 | 固定 | 动态决策 |
+| 工具使用 | 单一 | 多工具协调 |
+| 推理能力 | 有限 | 深度推理 |
+| 错误处理 | 简单 | 自我纠正 |
+
+## 应用场景
+
+- 复杂的多步骤研究任务
+- 需要多数据源整合的分析
+- 自动化工作流
+
+> Agentic RAG 代表了 AI 应用从"工具"到"助手"的进化。
 `,
-    category: "性能优化",
-    tags: ["性能优化", "Web Vitals", "用户体验"],
+    category: "AI 应用",
+    tags: ["Agentic RAG", "LangChain", "Agent", "LLM"],
     date: "2026-04-25",
     readTime: "18 分钟",
-    views: 2100,
+    views: 3890,
     featured: true,
   },
   {
     id: 6,
-    title: "构建可访问的 Web 应用：WCAG 2.2 指南",
-    slug: "accessible-web-apps-wcag-2.2-guide",
-    excerpt: "学习如何构建符合 WCAG 2.2 标准的可访问性 Web 应用。",
-    content: `# 构建可访问的 Web 应用
+    title: "Pandas 数据分析实战：从数据清洗到可视化",
+    slug: "pandas-data-analysis-tutorial",
+    excerpt: "使用 Pandas 进行数据清洗、转换和分析的完整实战指南，包含丰富的代码示例。",
+    content: `# Pandas 数据分析实战：从数据清洗到可视化
 
-可访问性是现代 Web 开发的重要考量。
+Pandas 是 Python 数据分析的核心工具，掌握它是 AI 工程师的必备技能。
 
-## WCAG 2.2 核心原则
+## DataFrame 基础
 
-1. **可感知**：信息必须以用户可以感知的方式呈现
-2. **可操作**：界面组件必须是可操作的
-3. **可理解**：信息和界面操作必须是可理解的
-4. **健壮**：内容必须足够健壮
+\`\`\`python
+import pandas as pd
+import numpy as np
 
-\`\`\`css
-button:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+# 创建 DataFrame
+data = {
+    'name': ['Alice', 'Bob', 'Charlie', 'David'],
+    'age': [25, 30, 35, 28],
+    'city': ['Beijing', 'Shanghai', 'Shenzhen', 'Guangzhou'],
+    'salary': [15000, 20000, 25000, 18000]
 }
+df = pd.DataFrame(data)
+print(df)
 \`\`\`
 
-> 可访问性不是功能，而是需求。
+## 数据清洗
+
+\`\`\`python
+# 处理缺失值
+df.dropna()                    # 删除含缺失值的行
+df.fillna(0)                   # 用 0 填充
+df['age'].fillna(df['age'].mean())  # 用平均值填充
+
+# 数据类型转换
+df['date'] = pd.to_datetime(df['date'])
+
+# 去重
+df.drop_duplicates()
+\`\`\`
+
+## 数据分析
+
+\`\`\`python
+# 分组统计
+city_stats = df.groupby('city').agg({
+    'salary': ['mean', 'max', 'min'],
+    'name': 'count'
+})
+
+# 相关性分析
+correlation = df[['age', 'salary']].corr()
+\`\`\`
+
+## 数据可视化
+
+\`\`\`python
+import matplotlib.pyplot as plt
+
+# 绘制柱状图
+df.groupby('city')['salary'].mean().plot(kind='bar')
+plt.title('各城市平均薪资')
+plt.ylabel('薪资')
+plt.show()
+\`\`\`
+
+> Pandas 让数据分析变得简单而高效。
 `,
-    category: "用户体验",
-    tags: ["可访问性", "WCAG", "用户体验"],
+    category: "AI 基础",
+    tags: ["Pandas", "Python", "数据分析", "数据可视化"],
     date: "2026-04-20",
-    readTime: "14 分钟",
-    views: 670,
+    readTime: "16 分钟",
+    views: 2340,
     featured: false,
   },
 ]
@@ -316,25 +492,27 @@ export const projects = [
 ]
 
 export const categories = [
-  { name: "前端框架", count: 12, slug: "frontend-frameworks" },
-  { name: "CSS 框架", count: 8, slug: "css-frameworks" },
-  { name: "编程语言", count: 15, slug: "programming-languages" },
-  { name: "性能优化", count: 6, slug: "performance-optimization" },
-  { name: "用户体验", count: 9, slug: "user-experience" },
-  { name: "开发工具", count: 11, slug: "development-tools" },
+  { name: "AI 学习", count: 15, slug: "ai-learning" },
+  { name: "AI 应用", count: 12, slug: "ai-applications" },
+  { name: "AI 基础", count: 10, slug: "ai-fundamentals" },
+  { name: "深度学习", count: 8, slug: "deep-learning" },
+  { name: "前端开发", count: 6, slug: "frontend-development" },
+  { name: "工程实践", count: 5, slug: "engineering-practice" },
 ]
 
 export const tags = [
-  { name: "Next.js", count: 18 },
-  { name: "React", count: 25 },
-  { name: "TypeScript", count: 22 },
-  { name: "Tailwind CSS", count: 15 },
-  { name: "性能优化", count: 12 },
-  { name: "用户体验", count: 10 },
-  { name: "Node.js", count: 14 },
-  { name: "AI", count: 8 },
-  { name: "RAG", count: 6 },
-  { name: "LangChain", count: 5 },
+  { name: "Python", count: 28 },
+  { name: "AI", count: 22 },
+  { name: "LangChain", count: 18 },
+  { name: "RAG", count: 15 },
+  { name: "LLM", count: 14 },
+  { name: "深度学习", count: 12 },
+  { name: "NumPy", count: 10 },
+  { name: "Pandas", count: 8 },
+  { name: "Transformer", count: 7 },
+  { name: "Agent", count: 6 },
+  { name: "NLP", count: 5 },
+  { name: "Next.js", count: 4 },
 ]
 
 export function getLatestPosts(count: number = 3) {

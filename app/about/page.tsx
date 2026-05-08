@@ -25,47 +25,47 @@ import { GitHubContributions } from "@/components/blog/github-contributions"
 
 export default function AboutPage() {
   const skills = [
-    { category: "前端框架", items: ["React", "Next.js", "Vue.js", "Angular"] },
-    { category: "编程语言", items: ["TypeScript", "JavaScript", "Python", "Go"] },
-    { category: "CSS 框架", items: ["Tailwind CSS", "Styled Components", "Sass"] },
-    { category: "AI / ML", items: ["LangChain", "RAG", "LangGraph", "NumPy"] },
-    { category: "开发工具", items: ["Git", "Docker", "VS Code", "Webpack"] },
-    { category: "云服务", items: ["AWS", "Vercel", "Netlify", "Firebase"] },
+    { category: "前端框架", items: ["React", "Next.js", "Vue.js", "Vite", "Webpack"] },
+    { category: "编程语言", items: ["TypeScript", "JavaScript", "Python"] },
+    { category: "前端工程化", items: ["Monorepo", "Tailwind CSS", "CI/CD", "Jenkins"] },
+    { category: "AI / ML", items: ["LangChain", "RAG", "Agent", "Transformer"] },
+    { category: "数据处理", items: ["NumPy", "Pandas", "PyTorch", "深度学习"] },
+    { category: "运维部署", items: ["Docker", "Linux", "AWS", "Vercel"] },
   ]
 
   const experience = [
     {
-      title: "高级前端工程师",
+      title: "高级前端工程师 / AI 全栈工程师",
       company: "科技公司",
       period: "2022 - 至今",
       description:
-        "负责公司核心产品的前端架构设计和开发，带领团队完成多个重要项目的交付。",
+        "负责公司核心产品的前端架构设计，同时深入 AI 领域，探索 LLM 应用开发和 RAG 系统构建。",
       achievements: [
         "主导前端架构升级，提升性能 40%",
-        "建立前端工程化体系，提高开发效率 30%",
-        "指导初级工程师，提升团队整体技术水平",
+        "构建基于 LangChain 的 RAG 知识库系统",
+        "探索 Agentic AI 在业务场景中的应用",
+      ],
+    },
+    {
+      title: "高级前端工程师",
+      company: "互联网公司",
+      period: "2019 - 2022",
+      description: "负责大型 Web 应用的前端架构设计和技术选型。",
+      achievements: [
+        "搭建 Monorepo 前端工程化体系",
+        "主导微前端架构改造",
+        "建立前端性能监控和优化体系",
       ],
     },
     {
       title: "前端工程师",
-      company: "互联网公司",
-      period: "2020 - 2022",
-      description: "参与公司多个 Web 应用的开发，负责前端技术选型和实现。",
-      achievements: [
-        "开发公司官网，提升品牌形象",
-        "实现多个复杂业务组件，提高代码复用率",
-        "优化页面性能，提升用户体验",
-      ],
-    },
-    {
-      title: "初级前端工程师",
       company: "创业公司",
-      period: "2018 - 2020",
-      description: "参与公司产品的前端开发，学习并实践前端技术。",
+      period: "2017 - 2019",
+      description: "从前端小白成长为独立负责项目的前端开发者。",
       achievements: [
-        "完成多个页面的开发和优化",
-        "学习并掌握 React 框架",
-        "参与团队代码审查，提高代码质量",
+        "从零学习前端技术栈",
+        "独立完成多个项目的前端开发",
+        "掌握 React、Vue 等主流框架",
       ],
     },
   ]
@@ -147,10 +147,10 @@ export default function AboutPage() {
               </div>
               <div className="flex flex-wrap gap-2 pt-1">
                 {[
-                  "Web 开发",
-                  "前端工程化",
-                  "AI / RAG",
-                  "用户体验设计",
+                  "AI 全栈工程师",
+                  "前端开发",
+                  "Python / AI",
+                  "LLM / RAG",
                   "技术写作",
                 ].map((tag) => (
                   <Badge key={tag} variant="secondary" className="text-label-12">
@@ -169,13 +169,20 @@ export default function AboutPage() {
                   GitHub
                 </Link>
                 <Link
-                  href={`https://twitter.com/${githubProfile.twitter}`}
+                  href={githubProfile.twitterUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={buttonVariants({ variant: "outline", size: "sm" }) + " gap-1.5"}
                 >
                   <Globe className="size-3.5" />
                   Twitter
+                </Link>
+                <Link
+                  href={`mailto:${githubProfile.email}`}
+                  className={buttonVariants({ variant: "outline", size: "sm" }) + " gap-1.5"}
+                >
+                  <Mail className="size-3.5" />
+                  Email
                 </Link>
               </div>
             </div>
@@ -339,14 +346,17 @@ export default function AboutPage() {
             <div className="absolute -left-[5px] top-0 size-2 rounded-full bg-accent" />
             <div className="flex items-center justify-between mb-1">
               <h3 className="text-label-16 text-foreground">
-                计算机科学与技术
+                {githubProfile.education.major}
               </h3>
               <span className="text-label-13 text-muted-foreground tabular-nums">
                 2013 - 2017
               </span>
             </div>
+            <p className="text-label-14 text-muted-foreground mb-1">
+              {githubProfile.education.school} · {githubProfile.education.degree}
+            </p>
             <p className="text-copy-14 text-foreground/80">
-              学习计算机科学基础知识，包括数据结构、算法、操作系统等。
+              虽然专业不是计算机，但通过自学和实践走上了前端开发之路，现在正在向 AI 全栈方向发展。
             </p>
           </div>
         </CardContent>

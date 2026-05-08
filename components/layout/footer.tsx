@@ -30,7 +30,7 @@ export function Footer() {
       label: "GitHub",
     },
     {
-      href: `https://twitter.com/${githubProfile.twitter}`,
+      href: githubProfile.twitterUrl,
       label: "Twitter",
     },
   ]
