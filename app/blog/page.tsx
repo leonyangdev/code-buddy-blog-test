@@ -44,7 +44,7 @@ export default function BlogPage() {
               slug: post.slug,
               date: post.date,
             }))}
-            popularPosts={sortedPosts
+            popularPosts={[...sortedPosts]
               .sort((a, b) => b.views - a.views)
               .slice(0, 5)
               .map((post) => ({

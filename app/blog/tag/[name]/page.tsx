@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import { ArrowLeft, Tag } from "lucide-react"
@@ -5,8 +6,26 @@ import { posts, tags } from "@/lib/data"
 import { Sidebar } from "@/components/layout/sidebar"
 import { PostCard } from "@/components/blog/post-card"
 
-export default function TagPage({ params }: { params: { name: string } }) {
-  const { name } = params
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ name: string }>
+}): Promise<Metadata> {
+  const { name } = await params
+  const tag = tags.find((t) => t.name.toLowerCase() === name.toLowerCase())
+  if (!tag) return { title: "标签未找到" }
+  return {
+    title: `标签: ${tag.name}`,
+    description: `浏览所有关于 ${tag.name} 的文章。`,
+  }
+}
+
+export default async function TagPage({
+  params,
+}: {
+  params: Promise<{ name: string }>
+}) {
+  const { name } = await params
   const tag = tags.find((t) => t.name.toLowerCase() === name.toLowerCase())
 
   if (!tag) {
@@ -52,7 +71,7 @@ export default function TagPage({ params }: { params: { name: string } }) {
               slug: post.slug,
               date: post.date,
             }))}
-            popularPosts={tagPosts
+            popularPosts={[...tagPosts]
               .sort((a, b) => b.views - a.views)
               .slice(0, 5)
               .map((post) => ({

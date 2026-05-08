@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import { ArrowLeft, Folder } from "lucide-react"
@@ -5,8 +6,26 @@ import { posts, categories } from "@/lib/data"
 import { Sidebar } from "@/components/layout/sidebar"
 import { PostCard } from "@/components/blog/post-card"
 
-export default function CategoryPage({ params }: { params: { slug: string } }) {
-  const { slug } = params
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const category = categories.find((c) => c.slug === slug)
+  if (!category) return { title: "分类未找到" }
+  return {
+    title: `分类: ${category.name}`,
+    description: `浏览 ${category.name} 分类下的所有文章。`,
+  }
+}
+
+export default async function CategoryPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
   const category = categories.find((c) => c.slug === slug)
 
   if (!category) {
@@ -52,7 +71,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
               slug: post.slug,
               date: post.date,
             }))}
-            popularPosts={categoryPosts
+            popularPosts={[...categoryPosts]
               .sort((a, b) => b.views - a.views)
               .slice(0, 5)
               .map((post) => ({
