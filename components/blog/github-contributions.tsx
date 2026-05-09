@@ -1,82 +1,29 @@
 "use client"
 
-import { useMemo } from "react"
-
-interface ContributionDay {
-  date: string
-  count: number
-  level: 0 | 1 | 2 | 3 | 4
-}
+import type { ContributionDay } from "@/lib/github"
 
 interface GitHubContributionsProps {
-  username: string
+  contributions: ContributionDay[]
 }
 
-function seededRandom(seed: number): () => number {
-  let s = seed
-  return () => {
-    s = (s * 1664525 + 1013904223) & 0xffffffff
-    return (s >>> 0) / 0xffffffff
+export function GitHubContributions({ contributions }: GitHubContributionsProps) {
+  if (contributions.length === 0) {
+    return (
+      <div className="py-8 text-center text-muted-foreground text-copy-14">
+        暂无法加载贡献数据
+      </div>
+    )
   }
-}
-
-function generateContributions(username: string): ContributionDay[] {
-  const today = new Date()
-  const seed = username.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0)
-  const rand = seededRandom(seed + today.getFullYear() * 1000 + today.getMonth())
-  const days: ContributionDay[] = []
-
-  for (let i = 364; i >= 0; i--) {
-    const date = new Date(today)
-    date.setDate(date.getDate() - i)
-
-    const dayOfWeek = date.getDay()
-    const isWeekday = dayOfWeek > 0 && dayOfWeek < 6
-    const random = rand()
-
-    let count = 0
-    let level: 0 | 1 | 2 | 3 | 4 = 0
-
-    if (isWeekday) {
-      if (random > 0.3) {
-        count = Math.floor(random * 12) + 1
-        if (count >= 10) level = 4
-        else if (count >= 6) level = 3
-        else if (count >= 3) level = 2
-        else level = 1
-      }
-    } else {
-      if (random > 0.6) {
-        count = Math.floor(random * 5) + 1
-        if (count >= 4) level = 3
-        else if (count >= 2) level = 2
-        else level = 1
-      }
-    }
-
-    days.push({
-      date: date.toISOString().split("T")[0],
-      count,
-      level,
-    })
-  }
-
-  return days
-}
-
-export function GitHubContributions({ username }: GitHubContributionsProps) {
-  const data = useMemo(() => generateContributions(username), [username])
 
   // Group by week
   const weeks: ContributionDay[][] = []
   let currentWeek: ContributionDay[] = []
 
-  data.forEach((day, i) => {
+  contributions.forEach((day, i) => {
     const date = new Date(day.date)
     const dayOfWeek = date.getDay()
 
     if (i === 0 && dayOfWeek !== 0) {
-      // Pad start of first week
       for (let j = 0; j < dayOfWeek; j++) {
         currentWeek.push({ date: "", count: -1, level: 0 })
       }
@@ -84,13 +31,13 @@ export function GitHubContributions({ username }: GitHubContributionsProps) {
 
     currentWeek.push(day)
 
-    if (dayOfWeek === 6 || i === data.length - 1) {
+    if (dayOfWeek === 6 || i === contributions.length - 1) {
       weeks.push(currentWeek)
       currentWeek = []
     }
   })
 
-  const totalContributions = data.reduce((sum, d) => sum + d.count, 0)
+  const totalContributions = contributions.reduce((sum, d) => sum + d.count, 0)
 
   const levelColors = [
     "bg-muted",

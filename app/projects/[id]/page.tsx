@@ -5,7 +5,7 @@ import { buttonVariants } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, ExternalLink, Globe, Star, ArrowUpRight } from "lucide-react"
-import { projects } from "@/lib/data"
+import { getGitHubTopRepos } from "@/lib/github"
 import { ProjectCard } from "@/components/blog/project-card"
 
 export async function generateMetadata({
@@ -14,7 +14,8 @@ export async function generateMetadata({
   params: Promise<{ id: string }>
 }): Promise<Metadata> {
   const { id } = await params
-  const project = projects.find((p) => p.id === Number(id))
+  const repos = await getGitHubTopRepos(50)
+  const project = repos.find((p) => String(p.id) === id)
   if (!project) return { title: "项目未找到" }
 
   return {
@@ -34,13 +35,14 @@ export default async function ProjectDetailPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const project = projects.find((p) => p.id === Number(id))
+  const repos = await getGitHubTopRepos(50)
+  const project = repos.find((p) => String(p.id) === id)
 
   if (!project) {
     notFound()
   }
 
-  const relatedProjects = projects
+  const relatedProjects = repos
     .filter(
       (p) =>
         p.id !== project.id &&

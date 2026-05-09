@@ -5,7 +5,7 @@ import { buttonVariants } from "@/components/ui/button"
 
 export const metadata: Metadata = {
   title: "关于我",
-  description: "了解 TechPulse 的技术背景、工作经历和兴趣爱好。",
+  description: "了解我的技术背景、工作经历和兴趣爱好。",
 }
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -20,10 +20,31 @@ import {
   Star,
   Globe,
 } from "lucide-react"
-import { githubProfile, projects } from "@/lib/data"
+import { githubProfile } from "@/lib/data"
+import { getGitHubProfile, getGitHubTopRepos, getGitHubContributions } from "@/lib/github"
 import { GitHubContributions } from "@/components/blog/github-contributions"
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [ghProfile, topRepos, contributions] = await Promise.all([
+    getGitHubProfile(),
+    getGitHubTopRepos(5),
+    getGitHubContributions(),
+  ])
+
+  const profile = ghProfile || {
+    username: githubProfile.username,
+    name: githubProfile.name,
+    bio: githubProfile.bio,
+    location: githubProfile.location,
+    avatarUrl: githubProfile.avatarUrl,
+    publicRepos: githubProfile.publicRepos,
+    followers: githubProfile.followers,
+    following: githubProfile.following,
+    memberSince: githubProfile.memberSince,
+  }
+
+  const totalStars = topRepos.reduce((sum, r) => sum + r.stars, 0)
+
   const skills = [
     { category: "前端框架", items: ["React", "Next.js", "Vue.js", "Vite", "Webpack"] },
     { category: "编程语言", items: ["TypeScript", "JavaScript", "Python"] },
@@ -93,8 +114,8 @@ export default function AboutPage() {
             <div className="flex-shrink-0">
               <div className="size-[112px] rounded-full border-2 border-border overflow-hidden">
                 <Image
-                  src={githubProfile.avatarUrl}
-                  alt={githubProfile.name}
+                  src={profile.avatarUrl}
+                  alt={profile.name}
                   width={112}
                   height={112}
                   className="object-cover size-full"
@@ -105,44 +126,44 @@ export default function AboutPage() {
             <div className="space-y-3 flex-1">
               <div>
                 <h2 className="text-heading-24 text-foreground">
-                  {githubProfile.name}
+                  {profile.name}
                 </h2>
                 <p className="text-copy-14 text-muted-foreground">
-                  @{githubProfile.username}
+                  @{profile.username}
                 </p>
               </div>
               <p className="text-copy-18 text-foreground">
-                {githubProfile.bio}
+                {profile.bio}
               </p>
               <div className="flex flex-wrap items-center gap-4 text-label-14 text-muted-foreground">
                 <span className="flex items-center gap-1.5">
                   <MapPin className="size-4" />
-                  {githubProfile.location}
+                  {profile.location}
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Calendar className="size-4" />
-                  {githubProfile.memberSince} 年加入 GitHub
+                  {profile.memberSince} 年加入 GitHub
                 </span>
               </div>
               <div className="flex flex-wrap gap-3 pt-1">
                 <div className="flex items-center gap-1.5 text-label-14">
                   <Star className="size-4 text-accent" />
                   <span className="tabular-nums font-medium">
-                    {githubProfile.totalStars}
+                    {totalStars}
                   </span>
                   <span className="text-muted-foreground">Stars</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-label-14">
                   <Globe className="size-4 text-muted-foreground" />
                   <span className="tabular-nums font-medium">
-                    {githubProfile.publicRepos}
+                    {profile.publicRepos}
                   </span>
                   <span className="text-muted-foreground">Repos</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-label-14">
                   <User className="size-4 text-muted-foreground" />
                   <span className="tabular-nums font-medium">
-                    {githubProfile.followers}
+                    {profile.followers}
                   </span>
                   <span className="text-muted-foreground">Followers</span>
                 </div>
@@ -162,7 +183,7 @@ export default function AboutPage() {
               </div>
               <div className="flex gap-2 pt-2">
                 <Link
-                  href={githubProfile.githubUrl}
+                  href={`https://github.com/${profile.username}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={buttonVariants({ variant: "outline", size: "sm" }) + " gap-1.5"}
@@ -204,7 +225,7 @@ export default function AboutPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <GitHubContributions username={githubProfile.username} />
+          <GitHubContributions contributions={contributions} />
         </CardContent>
       </Card>
 
@@ -256,7 +277,7 @@ export default function AboutPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {projects.slice(0, 5).map((project) => (
+            {topRepos.map((project) => (
               <Link
                 key={project.id}
                 href={project.github}

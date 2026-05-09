@@ -1,9 +1,10 @@
 import { MetadataRoute } from "next"
-import { posts, projects } from "@/lib/data"
+import { posts } from "@/lib/data"
+import { getGitHubTopRepos } from "@/lib/github"
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://your-domain.com"
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = siteUrl
 
   // 静态页面
@@ -55,7 +56,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }))
 
   // 项目页面
-  const projectPages = projects.map((project) => ({
+  const repos = await getGitHubTopRepos(20)
+  const projectPages = repos.map((project) => ({
     url: `${baseUrl}/projects/${project.id}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,

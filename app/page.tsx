@@ -1,7 +1,8 @@
 import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import { ArrowRight, Mail } from "lucide-react"
-import { getLatestPosts, getFeaturedProjects } from "@/lib/data"
+import { getLatestPosts } from "@/lib/data"
+import { getGitHubTopRepos } from "@/lib/github"
 import { PostCard } from "@/components/blog/post-card"
 import { ProjectCard } from "@/components/blog/project-card"
 import { SectionHeading } from "@/components/layout/section-heading"
@@ -14,9 +15,10 @@ export const metadata = {
   description: "一个关于 AI 全栈工程师的技术博客，分享前端开发、Python、人工智能、LLM、RAG 的学习笔记和实践经验。",
 }
 
-export default function Home() {
+export default async function Home() {
   const latestPosts = getLatestPosts(4)
-  const featuredProjects = getFeaturedProjects()
+  const allRepos = await getGitHubTopRepos(10)
+  const featuredProjects = allRepos.filter((r) => r.featured).slice(0, 3)
 
   return (
     <div>

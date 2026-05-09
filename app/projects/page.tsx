@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 import { Card, CardContent } from "@/components/ui/card"
 import { Star, Code, FolderOpen } from "lucide-react"
-import { projects, githubProfile } from "@/lib/data"
+import { githubProfile } from "@/lib/data"
+import { getGitHubProfile, getGitHubTopRepos } from "@/lib/github"
 import { ProjectCard } from "@/components/blog/project-card"
 
 export const metadata: Metadata = {
@@ -9,14 +10,15 @@ export const metadata: Metadata = {
   description: "探索我的开源项目和作品集。",
 }
 
-export default function ProjectsPage() {
-  const sortedProjects = [...projects].sort((a, b) => {
-    if (a.featured && !b.featured) return -1
-    if (!a.featured && b.featured) return 1
-    return b.stars - a.stars
-  })
+export default async function ProjectsPage() {
+  const [ghProfile, topRepos] = await Promise.all([
+    getGitHubProfile(),
+    getGitHubTopRepos(20),
+  ])
 
-  const totalStars = projects.reduce((sum, p) => sum + p.stars, 0)
+  const repos = topRepos.length > 0 ? topRepos : []
+  const totalStars = repos.reduce((sum, p) => sum + p.stars, 0)
+  const publicRepos = ghProfile?.publicRepos || githubProfile.publicRepos
 
   return (
     <div className="space-y-8">
@@ -34,7 +36,7 @@ export default function ProjectsPage() {
           <CardContent className="pt-6">
             <FolderOpen className="size-8 mx-auto mb-2 text-accent" />
             <div className="text-heading-32 text-foreground tabular-nums">
-              {githubProfile.publicRepos}
+              {publicRepos}
             </div>
             <div className="text-label-14 text-muted-foreground">仓库总数</div>
           </CardContent>
@@ -52,7 +54,7 @@ export default function ProjectsPage() {
           <CardContent className="pt-6">
             <Star className="size-8 mx-auto mb-2 text-accent" />
             <div className="text-heading-32 text-foreground tabular-nums">
-              {projects.filter((p) => p.featured).length}
+              {repos.filter((p) => p.featured).length}
             </div>
             <div className="text-label-14 text-muted-foreground">精选项目</div>
           </CardContent>
@@ -61,7 +63,7 @@ export default function ProjectsPage() {
           <CardContent className="pt-6">
             <Code className="size-8 mx-auto mb-2 text-accent" />
             <div className="text-heading-32 text-foreground tabular-nums">
-              10+
+              {[...new Set(repos.flatMap((r) => r.tags))].length}+
             </div>
             <div className="text-label-14 text-muted-foreground">技术栈</div>
           </CardContent>
@@ -71,7 +73,7 @@ export default function ProjectsPage() {
       {/* Project list */}
       <section>
         <div>
-          {sortedProjects.map((project) => (
+          {repos.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
         </div>
