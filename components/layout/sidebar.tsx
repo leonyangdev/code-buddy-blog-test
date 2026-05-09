@@ -2,7 +2,7 @@ import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { Tag, Folder, Clock, TrendingUp, User } from "lucide-react"
-import { githubProfile } from "@/lib/data"
+import { getGitHubProfile } from "@/lib/github"
 
 interface SidebarProps {
   categories?: Array<{ name: string; count: number; slug: string }>
@@ -12,13 +12,17 @@ interface SidebarProps {
   className?: string
 }
 
-export function Sidebar({
+export async function Sidebar({
   categories = [],
   tags = [],
   recentPosts = [],
   popularPosts = [],
   className = "",
 }: SidebarProps) {
+  const profile = await getGitHubProfile()
+  const authorName = profile?.name || "Leon Yang"
+  const authorBio = profile?.bio || "高级前端开发工程师 | AI 全栈工程师"
+
   return (
     <aside className={`space-y-5 ${className}`}>
       {/* Categories */}
@@ -137,14 +141,14 @@ export function Sidebar({
               />
             </div>
             <div>
-              <h4 className="text-label-14 text-foreground">兰亭古墨</h4>
+              <h4 className="text-label-14 text-foreground">{authorName}</h4>
               <p className="text-label-11 text-muted-foreground">
-                @{githubProfile.username}
+                @{profile?.username || "leonyangdev"}
               </p>
             </div>
           </div>
           <p className="text-copy-13 text-muted-foreground leading-relaxed">
-            {githubProfile.bio}
+            {authorBio}
           </p>
           <Link
             href="/about"
