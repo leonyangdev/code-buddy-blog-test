@@ -115,24 +115,63 @@ export async function getGitHubTopRepos(count: number = 10): Promise<GitHubProje
 }
 
 export async function getGitHubContributions(): Promise<ContributionDay[]> {
+  if (!process.env.GITHUB_TOKEN) return []
+
   try {
-    const headers: Record<string, string> = {
-      Accept: "application/json",
-    }
-    if (process.env.GITHUB_TOKEN) {
-      headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`
-    }
-    const res = await fetch(
-      `https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}?y=last`,
-      { headers, next: { revalidate: 21600 } }
-    )
+    const query = `
+      query {
+        user(login: "${GITHUB_USERNAME}") {
+          contributionsCollection {
+            contributionCalendar {
+              weeks {
+                contributionDays {
+                  contributionCount
+                  date
+                  color
+                }
+              }
+            }
+          }
+        }
+      }
+    `
+
+    const res = await fetch("https://api.github.com/graphql", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query }),
+      next: { revalidate: 21600 },
+    })
+
     if (!res.ok) return []
+
     const data = await res.json()
-    return (data.contributions || []).map((d: { date: string; count: number; level: number }) => ({
-      date: d.date,
-      count: d.count,
-      level: Math.min(d.level, 4) as 0 | 1 | 2 | 3 | 4,
-    }))
+    const weeks = data.data?.user?.contributionsCollection?.contributionCalendar?.weeks
+    if (!weeks) return []
+
+    const colorToLevel = (color: string): 0 | 1 | 2 | 3 | 4 => {
+      if (color === "#ebedf0" || color === "#161b22") return 0
+      if (color === "#9be9a8" || color === "#0e4429") return 1
+      if (color === "#40c463" || color === "#006d32") return 2
+      if (color === "#30a14e" || color === "#26a641") return 3
+      if (color === "#216e39" || color === "#39d353") return 4
+      return 0
+    }
+
+    const days: ContributionDay[] = []
+    for (const week of weeks) {
+      for (const day of week.contributionDays) {
+        days.push({
+          date: day.date,
+          count: day.contributionCount,
+          level: colorToLevel(day.color),
+        })
+      }
+    }
+    return days
   } catch {
     return []
   }
