@@ -79,13 +79,37 @@ export async function getGitHubProfile(): Promise<GitHubProfile | null> {
   const user = await fetchGitHub<GitHubUser>(`/users/${GITHUB_USERNAME}`)
   if (!user) return null
 
+  // Use GraphQL to get the same repo count as GitHub profile page
+  let repoCount = user.public_repos
+  if (process.env.GITHUB_TOKEN) {
+    try {
+      const query = `{ user(login: "${GITHUB_USERNAME}") { repositories(ownerAffiliations: OWNER, privacy: PUBLIC) { totalCount } } }`
+      const res = await fetch("https://api.github.com/graphql", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query }),
+        next: { revalidate: 3600 },
+      })
+      if (res.ok) {
+        const data = await res.json()
+        const count = data.data?.user?.repositories?.totalCount
+        if (count) repoCount = count
+      }
+    } catch {
+      // fallback to REST API value
+    }
+  }
+
   return {
     username: user.login,
     name: user.name || user.login,
     bio: user.bio || "",
     location: user.location || "",
     avatarUrl: "/avatar.png",
-    publicRepos: user.public_repos,
+    publicRepos: repoCount,
     followers: user.followers,
     following: user.following,
     memberSince: new Date(user.created_at).getFullYear().toString(),
