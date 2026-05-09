@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback, useRef, useMemo } from "react"
+import { useState, useEffect, useCallback, useRef, useMemo, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { buttonVariants } from "@/components/ui/button"
 import { Search, X } from "lucide-react"
@@ -38,7 +38,7 @@ function HighlightText({ text, query }: { text: string; query: string }) {
   )
 }
 
-export default function SearchPage() {
+function SearchContent() {
   const searchParams = useSearchParams()
   const initialQuery = searchParams.get("q") || ""
 
@@ -153,5 +153,28 @@ export default function SearchPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="space-y-8">
+          <div>
+            <h1 className="text-heading-40 text-foreground">搜索文章</h1>
+            <p className="text-copy-16 text-muted-foreground mt-2">
+              搜索文章标题、内容、标签或分类
+            </p>
+          </div>
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
+            <div className="w-full h-12 pl-12 rounded-xl bg-muted animate-pulse" />
+          </div>
+        </div>
+      }
+    >
+      <SearchContent />
+    </Suspense>
   )
 }

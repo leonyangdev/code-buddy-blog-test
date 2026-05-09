@@ -1,16 +1,18 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import type { posts as PostsType } from "@/lib/data"
+import { posts as allPosts } from "@/lib/data"
+
+type Post = (typeof allPosts)[number]
 import { PostCard } from "./post-card"
 import { BlogSearch } from "./blog-search"
 
 interface BlogListProps {
-  posts: PostsType
+  posts: Post[]
 }
 
 export function BlogList({ posts }: BlogListProps) {
-  const [filteredPosts, setFilteredPosts] = useState(posts)
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>(posts)
 
   const handleSearch = useCallback(
     (query: string) => {

@@ -58,6 +58,7 @@ export function Giscus({
     script.setAttribute("data-input-position", inputPosition)
     script.setAttribute("data-theme", theme)
     script.setAttribute("data-lang", lang)
+    script.setAttribute("data-loading", "lazy")
     script.setAttribute("crossorigin", "anonymous")
     script.async = true
 
@@ -120,10 +121,10 @@ export function BlogComments({ className = "" }: { className?: string }) {
   // TODO: 替换为你的 Giscus 配置
   // 访问 https://giscus.app 获取配置
   const config = {
-    repo: "leonyangdev/code-buddy-blog-test" as `${string}/${string}`,
-    repoId: "", // 从 giscus.app 获取
+    repo: "leonyangdev/wild-intelligence-blog" as `${string}/${string}`,
+    repoId: "R_kgDOSX2ByQ",
     category: "Announcements",
-    categoryId: "", // 从 giscus.app 获取
+    categoryId: "DIC_kwDOSX2Byc4C8n6P",
   }
 
   // 如果没有配置，显示配置引导
@@ -190,7 +191,7 @@ export function BlogComments({ className = "" }: { className?: string }) {
         mapping="pathname"
         reactionsEnabled={true}
         inputPosition="top"
-        theme="preferred_color_scheme"
+        theme="light"
         lang="zh-CN"
       />
     </div>
