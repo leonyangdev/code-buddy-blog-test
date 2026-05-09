@@ -137,7 +137,7 @@ export function Sidebar({
               />
             </div>
             <div>
-              <h4 className="text-label-14 text-foreground">TechPulse</h4>
+              <h4 className="text-label-14 text-foreground">兰亭古墨</h4>
               <p className="text-label-11 text-muted-foreground">
                 @{githubProfile.username}
               </p>
