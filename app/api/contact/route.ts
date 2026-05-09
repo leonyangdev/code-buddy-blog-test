@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server"
 
+function getResend() {
+  const { Resend } = require("resend")
+  return new Resend(process.env.RESEND_API_KEY)
+}
+
 interface ContactPayload {
   name?: string
   email?: string
@@ -42,14 +47,47 @@ export async function POST(request: Request) {
       )
     }
 
-    // TODO: Integrate with email service (Resend, SendGrid, etc.)
-    // For now, log the submission and return success
-    console.log("[Contact Form Submission]", {
-      name: name!.trim(),
-      email: email!.trim(),
-      subject: subject!.trim(),
-      message: message!.trim(),
-      timestamp: new Date().toISOString(),
+    const ownerEmail = process.env.CONTACT_EMAIL || process.env.RESEND_FROM_EMAIL
+    if (!ownerEmail) {
+      return NextResponse.json(
+        { success: false, error: "邮件服务未配置" },
+        { status: 500 }
+      )
+    }
+
+    await getResend().emails.send({
+      from: "TechPulse <onboarding@resend.dev>",
+      to: ownerEmail,
+      replyTo: email!.trim(),
+      subject: `[TechPulse 联系] ${subject!.trim()}`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+            新的联系消息
+          </h2>
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="padding: 8px 0; color: #666; width: 80px;">姓名</td>
+              <td style="padding: 8px 0; color: #333;">${name!.trim()}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; color: #666;">邮箱</td>
+              <td style="padding: 8px 0; color: #333;">${email!.trim()}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; color: #666;">主题</td>
+              <td style="padding: 8px 0; color: #333;">${subject!.trim()}</td>
+            </tr>
+          </table>
+          <div style="margin-top: 16px; padding: 16px; background: #f9f9f9; border-radius: 8px;">
+            <p style="color: #666; margin: 0 0 8px 0; font-size: 12px;">消息内容</p>
+            <p style="color: #333; margin: 0; white-space: pre-wrap;">${message!.trim()}</p>
+          </div>
+          <p style="color: #999; font-size: 12px; margin-top: 24px;">
+            此邮件由 TechPulse 博客联系表单自动发送
+          </p>
+        </div>
+      `,
     })
 
     return NextResponse.json({

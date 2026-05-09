@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server"
 
+function getResend() {
+  const { Resend } = require("resend")
+  return new Resend(process.env.RESEND_API_KEY)
+}
+
 interface NewsletterPayload {
   email?: string
 }
@@ -42,11 +47,55 @@ export async function POST(request: Request) {
       )
     }
 
-    // TODO: Integrate with newsletter service (Mailchimp, Buttondown, Resend, etc.)
-    // For now, log the subscription and return success
-    console.log("[Newsletter Subscription]", {
-      email: email.trim(),
-      timestamp: new Date().toISOString(),
+    const fromEmail = process.env.RESEND_FROM_EMAIL
+    if (!fromEmail) {
+      return NextResponse.json(
+        { success: false, error: "邮件服务未配置" },
+        { status: 500 }
+      )
+    }
+
+    // Send welcome email to subscriber
+    await getResend().emails.send({
+      from: "TechPulse <onboarding@resend.dev>",
+      to: email.trim(),
+      subject: "欢迎订阅 TechPulse！",
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333;">欢迎订阅 TechPulse！</h2>
+          <p style="color: #555; line-height: 1.6;">
+            感谢你订阅我的技术博客。我会定期分享关于前端开发、AI 全栈、LLM 和 RAG 的最新见解和实战经验。
+          </p>
+          <div style="margin: 24px 0; padding: 16px; background: #f9f9f9; border-radius: 8px;">
+            <p style="color: #333; margin: 0; font-weight: 500;">你可以在这里阅读最新文章：</p>
+            <a href="${process.env.NEXT_PUBLIC_SITE_URL || "https://your-domain.com"}/blog" style="color: #0070f3; text-decoration: none;">
+              ${process.env.NEXT_PUBLIC_SITE_URL || "https://your-domain.com"}/blog
+            </a>
+          </div>
+          <p style="color: #999; font-size: 12px;">
+            如果你不希望收到邮件，可以忽略此邮件。
+          </p>
+        </div>
+      `,
+    })
+
+    // Notify owner about new subscriber
+    const ownerEmail = process.env.CONTACT_EMAIL || fromEmail
+    await getResend().emails.send({
+      from: "TechPulse <onboarding@resend.dev>",
+      to: ownerEmail,
+      subject: "[TechPulse 订阅] 新的邮件订阅者",
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333;">新的邮件订阅</h2>
+          <p style="color: #555;">
+            有一个新的用户订阅了你的博客邮件通知：
+          </p>
+          <div style="padding: 12px 16px; background: #f0f7ff; border-radius: 8px; margin: 16px 0;">
+            <p style="color: #333; margin: 0;">📧 ${email.trim()}</p>
+          </div>
+        </div>
+      `,
     })
 
     return NextResponse.json({
