@@ -31,16 +31,18 @@ export default async function AboutPage() {
     getGitHubContributions(),
   ])
 
-  const profile = ghProfile || {
-    username: githubProfile.username,
-    name: githubProfile.name,
-    bio: githubProfile.bio,
-    location: githubProfile.location,
-    avatarUrl: githubProfile.avatarUrl,
-    publicRepos: githubProfile.publicRepos,
-    followers: githubProfile.followers,
-    following: githubProfile.following,
-    memberSince: githubProfile.memberSince,
+  const profile = {
+    ...(ghProfile || {
+      username: githubProfile.username,
+      name: githubProfile.name,
+      bio: githubProfile.bio,
+      location: githubProfile.location,
+      publicRepos: githubProfile.publicRepos,
+      followers: githubProfile.followers,
+      following: githubProfile.following,
+      memberSince: githubProfile.memberSince,
+    }),
+    avatarUrl: "/avatar.png",
   }
 
   const totalStars = topRepos.reduce((sum, r) => sum + r.stars, 0)

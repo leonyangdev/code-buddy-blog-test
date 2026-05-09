@@ -5,7 +5,7 @@
 // GitHub 用户信息
 export const githubProfile = {
   username: "leonyangdev",
-  name: "兰亭古墨",
+  name: "Leon Yang",
   bio: "高级前端开发工程师 | AI 全栈工程师 | 正在深入学习人工智能",
   location: "ShenZhen, CHINA",
   avatarUrl: "/avatar.png",

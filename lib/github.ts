@@ -84,7 +84,7 @@ export async function getGitHubProfile(): Promise<GitHubProfile | null> {
     name: user.name || user.login,
     bio: user.bio || "",
     location: user.location || "",
-    avatarUrl: user.avatar_url,
+    avatarUrl: "/avatar.png",
     publicRepos: user.public_repos,
     followers: user.followers,
     following: user.following,

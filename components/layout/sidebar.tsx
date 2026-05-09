@@ -130,7 +130,7 @@ export function Sidebar({
             <div className="size-10 rounded-full overflow-hidden shrink-0">
               <Image
                 src="/avatar.png"
-                alt="兰亭古墨"
+                alt="Leon Yang"
                 width={40}
                 height={40}
                 className="object-cover size-full"
