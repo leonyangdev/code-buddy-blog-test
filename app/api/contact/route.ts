@@ -56,10 +56,10 @@ export async function POST(request: Request) {
     }
 
     await getResend().emails.send({
-      from: "TechPulse <onboarding@resend.dev>",
+      from: "Wild Intelligence <noreply@hefeng6500.cn>",
       to: ownerEmail,
       replyTo: email!.trim(),
-      subject: `[TechPulse 联系] ${subject!.trim()}`,
+      subject: `[Wild Intelligence 联系] ${subject!.trim()}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px;">
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
             <p style="color: #333; margin: 0; white-space: pre-wrap;">${message!.trim()}</p>
           </div>
           <p style="color: #999; font-size: 12px; margin-top: 24px;">
-            此邮件由 TechPulse 博客联系表单自动发送
+            此邮件由 Wild Intelligence 博客联系表单自动发送
           </p>
         </div>
       `,

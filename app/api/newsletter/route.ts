@@ -57,12 +57,12 @@ export async function POST(request: Request) {
 
     // Send welcome email to subscriber
     await getResend().emails.send({
-      from: "TechPulse <onboarding@resend.dev>",
+      from: "Wild Intelligence <noreply@hefeng6500.cn>",
       to: email.trim(),
-      subject: "欢迎订阅 TechPulse！",
+      subject: "欢迎订阅 Wild Intelligence！",
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #333;">欢迎订阅 TechPulse！</h2>
+          <h2 style="color: #333;">欢迎订阅 Wild Intelligence！</h2>
           <p style="color: #555; line-height: 1.6;">
             感谢你订阅我的技术博客。我会定期分享关于前端开发、AI 全栈、LLM 和 RAG 的最新见解和实战经验。
           </p>
@@ -82,9 +82,9 @@ export async function POST(request: Request) {
     // Notify owner about new subscriber
     const ownerEmail = process.env.CONTACT_EMAIL || fromEmail
     await getResend().emails.send({
-      from: "TechPulse <onboarding@resend.dev>",
+      from: "Wild Intelligence <noreply@hefeng6500.cn>",
       to: ownerEmail,
-      subject: "[TechPulse 订阅] 新的邮件订阅者",
+      subject: "[Wild Intelligence 订阅] 新的邮件订阅者",
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #333;">新的邮件订阅</h2>
