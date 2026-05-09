@@ -1,10 +1,13 @@
 import "server-only"
 import { prisma } from "./prisma"
 import { posts, categories, tags } from "./data"
+import type { Post, Tag, PostTag } from "@prisma/client"
+
+type PostWithTagNames = Post & { tags: (PostTag & { tag: Tag })[] }
 
 export async function getPostsFromDB(count?: number) {
   try {
-    const dbPosts = await prisma.post.findMany({
+    const dbPosts: PostWithTagNames[] = await prisma.post.findMany({
       include: { tags: { include: { tag: true } } },
       orderBy: { date: "desc" },
       ...(count ? { take: count } : {}),
@@ -32,7 +35,7 @@ export async function getPostsFromDB(count?: number) {
 
 export async function getPostBySlugFromDB(slug: string) {
   try {
-    const p = await prisma.post.findUnique({
+    const p: PostWithTagNames | null = await prisma.post.findUnique({
       where: { slug },
       include: { tags: { include: { tag: true } } },
     })
@@ -72,7 +75,7 @@ export async function getCategoriesFromDB() {
       by: ["category"],
       _count: { id: true },
     })
-    return result.map((r) => ({
+    return result.map((r: { category: string; _count: { id: number } }) => ({
       name: r.category,
       count: r._count.id,
       slug: r.category.toLowerCase().replace(/\s+/g, "-"),
@@ -88,7 +91,7 @@ export async function getTagsFromDB() {
       include: { _count: { select: { posts: true } } },
       orderBy: { posts: { _count: "desc" } },
     })
-    return result.map((t) => ({
+    return result.map((t: { name: string; _count: { posts: number } }) => ({
       name: t.name,
       count: t._count.posts,
     }))
