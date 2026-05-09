@@ -20,7 +20,7 @@ export const githubProfile = {
   memberSince: "2017",
   education: {
     school: "东华理工大学",
-    major: "环境工程",
+    major: "计算机科学与技术",
     degree: "本科",
   },
   yearsOfExperience: 9,

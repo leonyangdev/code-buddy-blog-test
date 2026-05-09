@@ -358,7 +358,7 @@ export default function AboutPage() {
               {githubProfile.education.school} · {githubProfile.education.degree}
             </p>
             <p className="text-copy-14 text-foreground/80">
-              虽然专业不是计算机，但通过自学和实践走上了前端开发之路，现在正在向 AI 全栈方向发展。
+              通过专业学习和实践走上了前端开发之路，现在正在向 AI 全栈方向发展。
             </p>
           </div>
         </CardContent>

@@ -1,0 +1,63 @@
+---
+alwaysApply: true
+---
+
+## Cursor Git Commit 提交规范
+
+### 核心原则
+
+- **语言限制**：所有 commit message 必须使用 **简体中文** 撰写（Type 除外）。
+- **结构清晰**：严格遵守 `Type: Description` 的格式。
+- **原子性**：单次提交应只包含一个逻辑上的功能点或修复，避免大杂烩。
+
+### 提交格式
+
+```text
+<type>: <description>
+
+[可选的 body：详细描述变更原因及主要逻辑]
+
+```
+
+### Type 类型定义
+
+在进行提交时，请根据以下分类选择最合适的 Type：
+
+| 类型         | 说明                                              |
+| ------------ | ------------------------------------------------- |
+| **feat**     | 引入新功能                                        |
+| **fix**      | 修复 Bug                                          |
+| **docs**     | 仅修改文档 (README, 注释等)                       |
+| **style**    | 格式化、缺失分号等 (不影响代码运行的变动)         |
+| **refactor** | 代码重构 (既不是新功能也不是修 Bug)               |
+| **perf**     | 提高性能的优化                                    |
+| **test**     | 添加或修改测试用例                                |
+| **chore**    | 构建过程或辅助工具的变动 (如依赖库更新、配置调整) |
+| **revert**   | 回滚到之前的提交                                  |
+
+### 详细约束
+
+1. **Header 限制**：
+
+- `type` 必须使用英文小写。
+- `description` 紧随冒号加一个空格，使用中文简洁描述。
+- 结尾不要加句号。
+
+2. **Body 建议**：
+
+- 如果变更涉及复杂的逻辑，请在空一行后详细说明「为什么要改」以及「怎么改的」。
+
+3. **自动生成建议**：
+
+- 在使用 Cursor 自动生成 commit message 时，请务必先对照此规则进行校验或翻译。
+
+---
+
+### 配置示例 (复制到 .cursorrules)
+
+> **Rule: Git Commit Message Protocol**
+> When generating or suggesting git commit messages, strictly follow the format: `<type>: <description>`.
+>
+> 1. Use **Simplified Chinese** for the `<description>` and `<body>`.
+> 2. Types must be one of: feat, fix, docs, style, refactor, perf, test, chore, revert.
+> 3. Example: `feat: 新增用户登录验证逻辑` or `fix: 修复移动端顶部导航栏遮挡问题`.
