@@ -90,6 +90,21 @@ export async function POST(request: Request) {
       `,
     })
 
+    // Save to database
+    try {
+      const { prisma } = await import("@/lib/prisma")
+      await prisma.contactMessage.create({
+        data: {
+          name: name!.trim(),
+          email: email!.trim(),
+          subject: subject!.trim(),
+          message: message!.trim(),
+        },
+      })
+    } catch {
+      // Database not available, email already sent
+    }
+
     return NextResponse.json({
       success: true,
       message: "消息已发送，我会尽快回复你！",

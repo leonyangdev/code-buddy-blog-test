@@ -98,6 +98,18 @@ export async function POST(request: Request) {
       `,
     })
 
+    // Save subscriber to database
+    try {
+      const { prisma } = await import("@/lib/prisma")
+      await prisma.subscriber.upsert({
+        where: { email: email.trim() },
+        update: { active: true },
+        create: { email: email.trim() },
+      })
+    } catch {
+      // Database not available, emails already sent
+    }
+
     return NextResponse.json({
       success: true,
       message: "订阅成功！感谢你的关注。",
