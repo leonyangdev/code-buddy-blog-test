@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { notFound } from "next/navigation"
 import { buttonVariants } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -9,7 +10,7 @@ import {
   Calendar,
   Tag,
 } from "lucide-react"
-import { posts, githubProfile } from "@/lib/data"
+import { posts, githubProfile, categories, tags } from "@/lib/data"
 import { Sidebar } from "@/components/layout/sidebar"
 import { BlogComments } from "@/components/blog/giscus"
 import { PostCard } from "@/components/blog/post-card"
@@ -44,7 +45,7 @@ export async function generateMetadata({
       tags: post.tags,
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
     },
@@ -60,15 +61,7 @@ export default async function BlogPostPage({
   const post = posts.find((p) => p.slug === slug)
 
   if (!post) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-        <h1 className="text-heading-48 text-foreground">404</h1>
-        <p className="text-copy-16 text-muted-foreground">文章未找到</p>
-        <Link href="/blog" className={buttonVariants()}>
-          返回博客
-        </Link>
-      </div>
-    )
+    notFound()
   }
 
   const html = await markdownToHtml(post.content)
@@ -87,7 +80,7 @@ export default async function BlogPostPage({
         url={`${siteUrl}/blog/${post.slug}`}
         datePublished={post.date}
         authorName={githubProfile.name}
-        publisherName="个人技术博客"
+        publisherName="TechPulse"
       />
 
       {/* Back button */}
@@ -178,14 +171,18 @@ export default async function BlogPostPage({
         <aside className="lg:col-start-2 space-y-6">
           <TableOfContents items={toc} />
           <Sidebar
-            categories={[
-              {
-                name: post.category,
-                count: 1,
-                slug: post.category.toLowerCase().replace(/\s+/g, "-"),
-              },
-            ]}
-            tags={post.tags.map((tag) => ({ name: tag, count: 1 }))}
+            categories={categories}
+            tags={tags.slice(0, 10)}
+            popularPosts={posts
+              .filter((p) => p.id !== post.id)
+              .sort((a, b) => b.views - a.views)
+              .slice(0, 3)
+              .map((p) => ({
+                title: p.title,
+                slug: p.slug,
+                date: p.date,
+                views: p.views,
+              }))}
           />
         </aside>
       </div>

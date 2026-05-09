@@ -9,6 +9,11 @@ import { HeroSection } from "@/components/layout/hero-section"
 import { NewsletterForm } from "@/components/layout/newsletter-form"
 import { ScrollReveal } from "@/components/layout/scroll-reveal"
 
+export const metadata = {
+  title: "TechPulse - 探索编程世界，分享技术见解",
+  description: "一个关于 AI 全栈工程师的技术博客，分享前端开发、Python、人工智能、LLM、RAG 的学习笔记和实践经验。",
+}
+
 export default function Home() {
   const latestPosts = getLatestPosts(4)
   const featuredProjects = getFeaturedProjects()
@@ -26,7 +31,7 @@ export default function Home() {
               description="探索最新的技术见解和实战经验"
               href="/blog"
             />
-            <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {latestPosts.map((post) => (
                 <PostCard key={post.id} post={post} />
               ))}
@@ -42,7 +47,7 @@ export default function Home() {
               description="探索我的开源项目和作品集"
               href="/projects"
             />
-            <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {featuredProjects.map((project) => (
                 <ProjectCard key={project.id} project={project} />
               ))}

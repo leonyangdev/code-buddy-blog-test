@@ -55,10 +55,12 @@
   .container { max-width: 1600px; }
 }
 
-/* 触摸设备 */
+/* 触摸设备 — 仅对导航链接和主要按钮增大触控区域 */
 @media (hover: none) and (pointer: coarse) {
-  a, button, [role="button"] {
+  nav a, .prose a {
     min-height: 44px;
+    display: inline-flex;
+    align-items: center;
   }
 }
 

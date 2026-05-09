@@ -1,26 +1,57 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef, useMemo } from "react"
 import { useSearchParams } from "next/navigation"
 import { buttonVariants } from "@/components/ui/button"
 import { Search, X } from "lucide-react"
-import { posts } from "@/lib/data"
+import { posts, tags } from "@/lib/data"
 import { PostCard } from "@/components/blog/post-card"
+
+function useDebounce(value: string, delay: number) {
+  const [debouncedValue, setDebouncedValue] = useState(value)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay)
+    return () => clearTimeout(timer)
+  }, [value, delay])
+
+  return debouncedValue
+}
+
+function HighlightText({ text, query }: { text: string; query: string }) {
+  if (!query.trim()) return <>{text}</>
+
+  const parts = text.split(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi"))
+
+  return (
+    <>
+      {parts.map((part, i) =>
+        part.toLowerCase() === query.toLowerCase() ? (
+          <mark key={i} className="bg-accent/20 text-accent rounded px-0.5">
+            {part}
+          </mark>
+        ) : (
+          part
+        )
+      )}
+    </>
+  )
+}
 
 export default function SearchPage() {
   const searchParams = useSearchParams()
   const initialQuery = searchParams.get("q") || ""
 
   const [query, setQuery] = useState(initialQuery)
+  const debouncedQuery = useDebounce(query, 300)
   const [searchResults, setSearchResults] = useState<typeof posts>([])
 
-  const handleSearch = useCallback((searchQuery: string) => {
-    setQuery(searchQuery)
-    if (searchQuery.trim() === "") {
+  useEffect(() => {
+    if (debouncedQuery.trim() === "") {
       setSearchResults([])
       return
     }
-    const lowerQuery = searchQuery.toLowerCase()
+    const lowerQuery = debouncedQuery.toLowerCase()
     const results = posts.filter(
       (post) =>
         post.title.toLowerCase().includes(lowerQuery) ||
@@ -29,18 +60,22 @@ export default function SearchPage() {
         post.category.toLowerCase().includes(lowerQuery)
     )
     setSearchResults(results)
-  }, [])
+  }, [debouncedQuery])
 
   useEffect(() => {
     if (initialQuery) {
-      handleSearch(initialQuery)
+      setQuery(initialQuery)
     }
-  }, [initialQuery, handleSearch])
+  }, [initialQuery])
 
   const clearSearch = () => {
     setQuery("")
     setSearchResults([])
   }
+
+  const popularTags = useMemo(() => {
+    return tags.slice(0, 6).map((t) => t.name)
+  }, [])
 
   return (
     <div className="space-y-8">
@@ -57,7 +92,7 @@ export default function SearchPage() {
         <input
           type="text"
           value={query}
-          onChange={(e) => handleSearch(e.target.value)}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder="输入关键词搜索..."
           autoFocus
           className="w-full h-12 pl-12 pr-12 text-copy-18 rounded-xl border border-border bg-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 transition-shadow duration-150"
@@ -73,7 +108,7 @@ export default function SearchPage() {
       </div>
 
       {/* Results */}
-      {query && (
+      {debouncedQuery && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-heading-20 text-foreground">搜索结果</h2>
@@ -91,7 +126,7 @@ export default function SearchPage() {
               </p>
             </div>
           ) : (
-            <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {searchResults.map((post) => (
                 <PostCard key={post.id} post={post} />
               ))}
@@ -101,21 +136,19 @@ export default function SearchPage() {
       )}
 
       {/* Hot tags */}
-      {!query && (
+      {!debouncedQuery && (
         <div className="space-y-4">
           <h2 className="text-heading-20 text-foreground">热门搜索</h2>
           <div className="flex flex-wrap gap-2">
-            {["Next.js", "React", "TypeScript", "Tailwind CSS", "性能优化", "用户体验"].map(
-              (tag) => (
-                <button
-                  key={tag}
-                  onClick={() => handleSearch(tag)}
-                  className={buttonVariants({ variant: "outline" })}
-                >
-                  {tag}
-                </button>
-              )
-            )}
+            {popularTags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => setQuery(tag)}
+                className={buttonVariants({ variant: "outline" })}
+              >
+                {tag}
+              </button>
+            ))}
           </div>
         </div>
       )}

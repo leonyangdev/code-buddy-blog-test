@@ -2,6 +2,7 @@ import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { Tag, Folder, Clock, TrendingUp, User } from "lucide-react"
+import { githubProfile } from "@/lib/data"
 
 interface SidebarProps {
   categories?: Array<{ name: string; count: number; slug: string }>
@@ -126,22 +127,24 @@ export function Sidebar({
         </h3>
         <div className="px-2 py-3 rounded-lg bg-muted/30">
           <div className="flex items-center gap-3 mb-2">
-            <Image
-              src="/avatar.png"
-              alt="兰亭古墨"
-              width={40}
-              height={40}
-              className="rounded-full shrink-0"
-            />
+            <div className="size-10 rounded-full overflow-hidden shrink-0">
+              <Image
+                src="/avatar.png"
+                alt="兰亭古墨"
+                width={40}
+                height={40}
+                className="object-cover size-full"
+              />
+            </div>
             <div>
-              <h4 className="text-label-14 text-foreground">兰亭古墨</h4>
+              <h4 className="text-label-14 text-foreground">TechPulse</h4>
               <p className="text-label-11 text-muted-foreground">
-                @leonyangdev
+                @{githubProfile.username}
               </p>
             </div>
           </div>
           <p className="text-copy-13 text-muted-foreground leading-relaxed">
-            高级前端工程师 | AI 全栈工程师 | 探索人工智能
+            {githubProfile.bio}
           </p>
           <Link
             href="/about"

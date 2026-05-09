@@ -1,16 +1,26 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Search } from "lucide-react"
 
-export function BlogSearch() {
+interface BlogSearchProps {
+  onSearch?: (query: string) => void
+}
+
+export function BlogSearch({ onSearch }: BlogSearchProps) {
   const router = useRouter()
   const [query, setQuery] = useState("")
 
+  useEffect(() => {
+    if (onSearch) {
+      onSearch(query)
+    }
+  }, [query, onSearch])
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (query.trim()) {
+    if (!onSearch && query.trim()) {
       router.push(`/search?q=${encodeURIComponent(query.trim())}`)
     }
   }

@@ -49,8 +49,8 @@ export function HeroGridBg() {
   return (
     <div
       ref={containerRef}
-      className="absolute inset-0 overflow-hidden pointer-events-none"
-      style={{ "--mx": "-1000px", "--my": "-1000px" } as React.CSSProperties}
+      className="absolute inset-0 overflow-hidden pointer-events-none animate-[gridFadeIn_1.5s_ease-out_forwards]"
+      style={{ "--mx": "-1000px", "--my": "-1000px", opacity: 0 } as React.CSSProperties}
     >
       {/* Primary grid — 1px lines, 60px spacing */}
       <div

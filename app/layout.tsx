@@ -12,8 +12,8 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://your-domain.com"
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${githubProfile.name} — 个人技术博客`,
-    template: `%s | ${githubProfile.name}`,
+    default: `TechPulse`,
+    template: `%s | TechPulse`,
   },
   description:
     "一个关于 AI 全栈工程师的技术博客，分享 Python、人工智能、LLM、RAG 和前端开发的学习笔记和实践经验。",
@@ -34,10 +34,10 @@ export const metadata: Metadata = {
     type: "website",
     locale: "zh_CN",
     url: siteUrl,
-    siteName: `${githubProfile.name} 的技术博客`,
-    title: `${githubProfile.name} — 个人技术博客`,
+    siteName: "TechPulse",
+    title: "TechPulse",
     description:
-      "一个优雅精致的技术博客，分享 Web 开发、前端工程化和用户体验设计的最新见解和实践经验。",
+      "一个关于 AI 全栈工程师的技术博客，分享 Python、人工智能、LLM、RAG 和前端开发的学习笔记和实践经验。",
     images: [
       {
         url: githubProfile.avatarUrl,
@@ -49,11 +49,12 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${githubProfile.name} — 个人技术博客`,
-    description:
-      "一个优雅精致的技术博客，分享 Web 开发、前端工程化和用户体验设计的最新见解和实践经验。",
+    title: "TechPulse",
     creator: `@${githubProfile.twitter}`,
     images: [githubProfile.avatarUrl],
+  },
+  alternates: {
+    canonical: siteUrl,
   },
   robots: {
     index: true,
@@ -83,7 +84,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         <WebsiteJsonLd
-          name="个人技术博客"
+          name="TechPulse"
           url={siteUrl}
           description="一个优雅精致的技术博客，分享 Web 开发、前端工程化和用户体验设计的最新见解和实践经验。"
           potentialAction={{

@@ -42,7 +42,7 @@ export function SeoHead({
   publishedTime,
   modifiedTime,
   author,
-  siteName = "个人技术博客",
+  siteName = "TechPulse",
   locale = "zh_CN",
 }: SeoHeadProps) {
   const fullTitle = `${title} | ${siteName}`

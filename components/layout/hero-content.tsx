@@ -19,7 +19,8 @@ export function HeroContent() {
 
     const els = {
       badge: container.querySelector("[data-anim=badge]"),
-      title: container.querySelector("[data-anim=title]"),
+      titleLine1: container.querySelector("[data-anim=title-1]"),
+      titleLine2: container.querySelector("[data-anim=title-2]"),
       subtitle: container.querySelector("[data-anim=subtitle]"),
       cta: container.querySelectorAll("[data-anim=cta]"),
       stats: container.querySelectorAll("[data-anim=stat]"),
@@ -27,34 +28,64 @@ export function HeroContent() {
 
     const allElements = [
       els.badge,
-      els.title,
+      els.titleLine1,
+      els.titleLine2,
       els.subtitle,
       ...Array.from(els.cta),
       ...Array.from(els.stats),
     ].filter(Boolean)
 
     if (reducedMotion) {
-      gsap.set(allElements, { opacity: 1, y: 0 })
+      gsap.set(allElements, { opacity: 1, y: 0, filter: "blur(0px)" })
       return
     }
 
-    // Set initial state
-    gsap.set(allElements, { opacity: 0, y: 20 })
+    // Initial state — varied positions + blur for depth
+    gsap.set(els.badge, { opacity: 0, y: 16, filter: "blur(4px)" })
+    gsap.set(els.titleLine1, { opacity: 0, y: 24, filter: "blur(6px)", scale: 0.97 })
+    gsap.set(els.titleLine2, { opacity: 0, y: 28, filter: "blur(8px)", scale: 0.96 })
+    gsap.set(els.subtitle, { opacity: 0, y: 14, filter: "blur(4px)" })
+    gsap.set(els.cta, { opacity: 0, y: 12, filter: "blur(3px)", scale: 0.98 })
+    gsap.set(els.stats, { opacity: 0, y: 10, filter: "blur(3px)" })
 
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        defaults: { ease: "power3.out" },
-        onComplete: () => {
-          // Ensure final state is maintained
-          gsap.set(allElements, { opacity: 1, y: 0 })
-        },
+      const tl = gsap.timeline({ defaults: { ease: "power2.out" } })
+
+      // Badge — gentle float up
+      tl.to(els.badge, {
+        opacity: 1, y: 0, filter: "blur(0px)",
+        duration: 0.7, ease: "power2.out",
       })
 
-      tl.to(els.badge, { opacity: 1, y: 0, duration: 0.5 })
-        .to(els.title, { opacity: 1, y: 0, duration: 0.6 }, "-=0.3")
-        .to(els.subtitle, { opacity: 1, y: 0, duration: 0.5 }, "-=0.35")
-        .to(els.cta, { opacity: 1, y: 0, duration: 0.4, stagger: 0.08 }, "-=0.3")
-        .to(els.stats, { opacity: 1, y: 0, duration: 0.4, stagger: 0.06 }, "-=0.2")
+      // Title line 1 — smooth rise with scale
+      .to(els.titleLine1, {
+        opacity: 1, y: 0, filter: "blur(0px)", scale: 1,
+        duration: 0.8, ease: "power3.out",
+      }, "-=0.45")
+
+      // Title line 2 — slightly delayed for cascade
+      .to(els.titleLine2, {
+        opacity: 1, y: 0, filter: "blur(0px)", scale: 1,
+        duration: 0.8, ease: "power3.out",
+      }, "-=0.65")
+
+      // Subtitle — calm fade
+      .to(els.subtitle, {
+        opacity: 1, y: 0, filter: "blur(0px)",
+        duration: 0.7, ease: "power2.out",
+      }, "-=0.55")
+
+      // CTAs — subtle pop in
+      .to(els.cta, {
+        opacity: 1, y: 0, filter: "blur(0px)", scale: 1,
+        duration: 0.6, stagger: 0.1, ease: "back.out(1.4)",
+      }, "-=0.45")
+
+      // Stats — gentle sequential appearance
+      .to(els.stats, {
+        opacity: 1, y: 0, filter: "blur(0px)",
+        duration: 0.5, stagger: 0.08, ease: "power2.out",
+      }, "-=0.35")
     }, container)
 
     return () => ctx.revert()
@@ -75,11 +106,11 @@ export function HeroContent() {
       </div>
 
       {/* Main heading */}
-      <h1 data-anim="title" className="mb-6">
-        <span className="block text-heading-48 md:text-heading-64 lg:text-heading-72 text-foreground">
+      <h1 className="mb-6">
+        <span data-anim="title-1" className="block text-heading-48 md:text-heading-64 lg:text-heading-72 text-foreground">
           探索编程世界
         </span>
-        <span className="block text-heading-48 md:text-heading-64 lg:text-heading-72 text-foreground/30 mt-1">
+        <span data-anim="title-2" className="block text-heading-48 md:text-heading-64 lg:text-heading-72 text-muted-foreground/60 mt-1">
           分享技术见解
         </span>
       </h1>

@@ -1,8 +1,7 @@
 import type { Metadata } from "next"
 import { posts, categories, tags } from "@/lib/data"
 import { Sidebar } from "@/components/layout/sidebar"
-import { PostCard } from "@/components/blog/post-card"
-import { BlogSearch } from "@/components/blog/blog-search"
+import { BlogList } from "@/components/blog/blog-list"
 
 export const metadata: Metadata = {
   title: "博客文章",
@@ -24,15 +23,10 @@ export default function BlogPage() {
         </p>
       </div>
 
-      {/* Inline search */}
-      <BlogSearch />
-
       {/* Main content */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8">
         <div>
-          {sortedPosts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
+          <BlogList posts={sortedPosts} />
         </div>
 
         <aside className="lg:col-start-2">

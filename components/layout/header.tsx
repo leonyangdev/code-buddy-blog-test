@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Home,
   BookOpen,
@@ -73,14 +72,8 @@ export function Header() {
     >
       <div className="container mx-auto flex h-14 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2 group">
-          <Avatar className="size-7 transition-transform duration-200 group-hover:scale-105">
-            <AvatarImage src="/avatar.png" alt="兰亭古墨" />
-            <AvatarFallback className="text-label-12 bg-accent/10 text-accent">
-              L
-            </AvatarFallback>
-          </Avatar>
-          <span className="text-heading-16 text-foreground hidden sm:inline">
-            个人技术博客
+          <span className="text-heading-18 text-foreground font-semibold transition-transform duration-200 group-hover:scale-105">
+            TechPulse
           </span>
         </Link>
 

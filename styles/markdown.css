@@ -46,10 +46,7 @@
 /* Paragraphs */
 .prose p {
   margin-bottom: 1.25em;
-  color: oklch(0.3 0 0);
-}
-.dark .prose p {
-  color: oklch(0.75 0 0);
+  color: var(--foreground);
 }
 
 /* Links */
@@ -118,20 +115,16 @@
 
 /* Code blocks */
 .prose pre {
-  background: oklch(0.16 0 0);
-  color: oklch(0.9 0 0);
+  background: var(--muted);
+  color: var(--foreground);
   padding: 1.25em 1.5em;
   border-radius: var(--radius-lg);
   overflow-x: auto;
   margin: 1.5em 0;
   font-size: 0.875rem;
   line-height: 1.7;
-  border: 1px solid oklch(0.25 0 0);
+  border: 1px solid var(--border);
   position: relative;
-}
-.dark .prose pre {
-  background: oklch(0.12 0 0);
-  border-color: oklch(0.3 0 0);
 }
 
 /* Language label for code blocks */

@@ -1,4 +1,6 @@
 import Link from "next/link"
+import { notFound } from "next/navigation"
+import type { Metadata } from "next"
 import { buttonVariants } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -6,23 +8,36 @@ import { ArrowLeft, ExternalLink, Globe, Star, ArrowUpRight } from "lucide-react
 import { projects } from "@/lib/data"
 import { ProjectCard } from "@/components/blog/project-card"
 
-export default function ProjectDetailPage({
+export async function generateMetadata({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
+}): Promise<Metadata> {
+  const { id } = await params
+  const project = projects.find((p) => p.id === Number(id))
+  if (!project) return { title: "项目未找到" }
+
+  return {
+    title: project.title,
+    description: project.description,
+    openGraph: {
+      title: project.title,
+      description: project.description,
+      type: "website",
+    },
+  }
+}
+
+export default async function ProjectDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
 }) {
-  const project = projects.find((p) => p.id === Number(params.id))
+  const { id } = await params
+  const project = projects.find((p) => p.id === Number(id))
 
   if (!project) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-        <h1 className="text-heading-48 text-foreground">404</h1>
-        <p className="text-copy-16 text-muted-foreground">项目未找到</p>
-        <Link href="/projects" className={buttonVariants()}>
-          返回项目
-        </Link>
-      </div>
-    )
+    notFound()
   }
 
   const relatedProjects = projects

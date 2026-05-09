@@ -5,7 +5,7 @@ import { buttonVariants } from "@/components/ui/button"
 
 export const metadata: Metadata = {
   title: "关于我",
-  description: "了解兰亭古墨的技术背景、工作经历和兴趣爱好。",
+  description: "了解 TechPulse 的技术背景、工作经历和兴趣爱好。",
 }
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -91,14 +91,16 @@ export default function AboutPage() {
         <CardContent>
           <div className="flex flex-col md:flex-row gap-6">
             <div className="flex-shrink-0">
-              <Image
-                src={githubProfile.avatarUrl}
-                alt={githubProfile.name}
-                width={112}
-                height={112}
-                className="rounded-full border-2 border-border"
-                priority
-              />
+              <div className="size-[112px] rounded-full border-2 border-border overflow-hidden">
+                <Image
+                  src={githubProfile.avatarUrl}
+                  alt={githubProfile.name}
+                  width={112}
+                  height={112}
+                  className="object-cover size-full"
+                  priority
+                />
+              </div>
             </div>
             <div className="space-y-3 flex-1">
               <div>

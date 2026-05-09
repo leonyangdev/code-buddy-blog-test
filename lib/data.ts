@@ -491,32 +491,30 @@ export const projects = [
   },
 ]
 
-export const categories = [
-  { name: "AI 学习", count: 15, slug: "ai-learning" },
-  { name: "AI 应用", count: 12, slug: "ai-applications" },
-  { name: "AI 基础", count: 10, slug: "ai-fundamentals" },
-  { name: "深度学习", count: 8, slug: "deep-learning" },
-  { name: "前端开发", count: 6, slug: "frontend-development" },
-  { name: "工程实践", count: 5, slug: "engineering-practice" },
-]
+// Categories computed from posts
+const categoryMap = new Map<string, number>()
+posts.forEach((post) => {
+  categoryMap.set(post.category, (categoryMap.get(post.category) || 0) + 1)
+})
+export const categories = Array.from(categoryMap.entries()).map(([name, count]) => ({
+  name,
+  count,
+  slug: name.toLowerCase().replace(/\s+/g, "-"),
+}))
 
-export const tags = [
-  { name: "Python", count: 28 },
-  { name: "AI", count: 22 },
-  { name: "LangChain", count: 18 },
-  { name: "RAG", count: 15 },
-  { name: "LLM", count: 14 },
-  { name: "深度学习", count: 12 },
-  { name: "NumPy", count: 10 },
-  { name: "Pandas", count: 8 },
-  { name: "Transformer", count: 7 },
-  { name: "Agent", count: 6 },
-  { name: "NLP", count: 5 },
-  { name: "Next.js", count: 4 },
-]
+// Tags computed from posts
+const tagMap = new Map<string, number>()
+posts.forEach((post) => {
+  post.tags.forEach((tag) => {
+    tagMap.set(tag, (tagMap.get(tag) || 0) + 1)
+  })
+})
+export const tags = Array.from(tagMap.entries())
+  .map(([name, count]) => ({ name, count }))
+  .sort((a, b) => b.count - a.count)
 
 export function getLatestPosts(count: number = 3) {
-  return posts
+  return [...posts]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, count)
 }
