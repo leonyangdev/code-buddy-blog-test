@@ -121,6 +121,10 @@ export default function ContactPage() {
     } catch (err) {
       setStatus("error")
       setErrorMsg(err instanceof Error ? err.message : "发送失败，请稍后重试")
+      setTurnstileToken(null)
+      if (widgetIdRef.current && window.turnstile) {
+        window.turnstile.reset(widgetIdRef.current)
+      }
     }
   }
 

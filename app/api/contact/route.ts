@@ -68,8 +68,25 @@ export async function POST(request: Request) {
       })
     }
 
-    // Rate limiting
     const ip = getClientIP(request)
+
+    // Turnstile verification (before rate limiting so failed attempts don't count)
+    if (!turnstileToken) {
+      return NextResponse.json(
+        { success: false, error: "请完成人机验证" },
+        { status: 400 }
+      )
+    }
+
+    const turnstileValid = await verifyTurnstile(turnstileToken, ip)
+    if (!turnstileValid) {
+      return NextResponse.json(
+        { success: false, error: "人机验证失败，请重试" },
+        { status: 400 }
+      )
+    }
+
+    // Rate limiting (only counts after Turnstile passes)
     const rateLimit = await checkRateLimit(ip, "/api/contact")
     if (!rateLimit.allowed) {
       return NextResponse.json(
@@ -83,22 +100,6 @@ export async function POST(request: Request) {
             "Retry-After": String(rateLimit.retryAfter),
           },
         }
-      )
-    }
-
-    // Turnstile verification
-    if (!turnstileToken) {
-      return NextResponse.json(
-        { success: false, error: "请完成人机验证" },
-        { status: 400 }
-      )
-    }
-
-    const turnstileValid = await verifyTurnstile(turnstileToken, ip)
-    if (!turnstileValid) {
-      return NextResponse.json(
-        { success: false, error: "人机验证失败，请重试" },
-        { status: 400 }
       )
     }
 
