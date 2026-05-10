@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import { ArrowLeft, Tag } from "lucide-react"
-import { posts, tags } from "@/lib/data"
+import { getAllPosts, getAllTags } from "@/lib/posts"
 import { Sidebar } from "@/components/layout/sidebar"
 import { PostCard } from "@/components/blog/post-card"
 
@@ -12,6 +12,7 @@ export async function generateMetadata({
   params: Promise<{ name: string }>
 }): Promise<Metadata> {
   const { name } = await params
+  const tags = getAllTags()
   const tag = tags.find((t) => t.name.toLowerCase() === name.toLowerCase())
   if (!tag) return { title: "标签未找到" }
   return {
@@ -26,6 +27,8 @@ export default async function TagPage({
   params: Promise<{ name: string }>
 }) {
   const { name } = await params
+  const allPosts = getAllPosts()
+  const tags = getAllTags()
   const tag = tags.find((t) => t.name.toLowerCase() === name.toLowerCase())
 
   if (!tag) {
@@ -38,7 +41,7 @@ export default async function TagPage({
     )
   }
 
-  const tagPosts = posts
+  const tagPosts = allPosts
     .filter((post) => post.tags.some((t) => t.toLowerCase() === name.toLowerCase()))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 

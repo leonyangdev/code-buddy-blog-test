@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { posts, categories, tags } from "@/lib/data"
+import { getAllPosts, getAllCategories, getAllTags } from "@/lib/posts"
 import { Sidebar } from "@/components/layout/sidebar"
 import { BlogList } from "@/components/blog/blog-list"
 
@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 }
 
 export default function BlogPage() {
-  const sortedPosts = [...posts].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  )
+  const sortedPosts = getAllPosts()
+  const categories = getAllCategories()
+  const tags = getAllTags()
 
   return (
     <div className="space-y-8">

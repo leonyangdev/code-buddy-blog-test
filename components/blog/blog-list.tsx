@@ -1,9 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import { posts as allPosts } from "@/lib/data"
-
-type Post = (typeof allPosts)[number]
+import type { Post } from "@/lib/posts"
 import { PostCard } from "./post-card"
 import { BlogSearch } from "./blog-search"
 

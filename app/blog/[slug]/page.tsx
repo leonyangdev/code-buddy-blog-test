@@ -10,7 +10,8 @@ import {
   Calendar,
   Tag,
 } from "lucide-react"
-import { posts, githubProfile, categories, tags } from "@/lib/data"
+import { githubProfile } from "@/lib/data"
+import { getAllPosts, getPostBySlug, getAllCategories, getAllTags } from "@/lib/posts"
 import { Sidebar } from "@/components/layout/sidebar"
 import { BlogComments } from "@/components/blog/giscus"
 import { PostCard } from "@/components/blog/post-card"
@@ -30,7 +31,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const post = posts.find((p) => p.slug === slug)
+  const post = getPostBySlug(slug)
   if (!post) return { title: "文章未找到" }
 
   return {
@@ -58,16 +59,20 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const post = posts.find((p) => p.slug === slug)
+  const post = getPostBySlug(slug)
 
   if (!post) {
     notFound()
   }
 
+  const allPosts = getAllPosts()
+  const categories = getAllCategories()
+  const tags = getAllTags()
+
   const html = await markdownToHtml(post.content)
   const toc = extractToc(html)
 
-  const relatedPosts = posts
+  const relatedPosts = allPosts
     .filter((p) => p.category === post.category && p.id !== post.id)
     .slice(0, 2)
 
@@ -173,7 +178,7 @@ export default async function BlogPostPage({
           <Sidebar
             categories={categories}
             tags={tags.slice(0, 10)}
-            popularPosts={posts
+            popularPosts={allPosts
               .filter((p) => p.id !== post.id)
               .sort((a, b) => b.views - a.views)
               .slice(0, 3)

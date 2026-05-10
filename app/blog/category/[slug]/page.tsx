@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import { ArrowLeft, Folder } from "lucide-react"
-import { posts, categories } from "@/lib/data"
+import { getAllPosts, getAllCategories } from "@/lib/posts"
 import { Sidebar } from "@/components/layout/sidebar"
 import { PostCard } from "@/components/blog/post-card"
 
@@ -12,6 +12,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
+  const categories = getAllCategories()
   const category = categories.find((c) => c.slug === slug)
   if (!category) return { title: "分类未找到" }
   return {
@@ -26,6 +27,8 @@ export default async function CategoryPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
+  const allPosts = getAllPosts()
+  const categories = getAllCategories()
   const category = categories.find((c) => c.slug === slug)
 
   if (!category) {
@@ -38,7 +41,7 @@ export default async function CategoryPage({
     )
   }
 
-  const categoryPosts = posts
+  const categoryPosts = allPosts
     .filter((post) => post.category === category.name)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 

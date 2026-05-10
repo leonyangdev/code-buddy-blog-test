@@ -1,6 +1,6 @@
 import "server-only"
 import { prisma } from "./prisma"
-import { posts, categories, tags } from "./data"
+import { getAllPosts, getAllCategories, getAllTags } from "./posts"
 import type { Post, Tag, PostTag } from "@prisma/client"
 
 type PostWithTagNames = Post & { tags: (PostTag & { tag: Tag })[] }
@@ -26,9 +26,7 @@ export async function getPostsFromDB(count?: number) {
       tags: p.tags.map((pt) => pt.tag.name),
     }))
   } catch {
-    const sorted = [...posts].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    )
+    const sorted = getAllPosts()
     return count ? sorted.slice(0, count) : sorted
   }
 }
@@ -54,7 +52,7 @@ export async function getPostBySlugFromDB(slug: string) {
       tags: p.tags.map((pt) => pt.tag.name),
     }
   } catch {
-    return posts.find((p) => p.slug === slug) || null
+    return getAllPosts().find((p) => p.slug === slug) || null
   }
 }
 
@@ -81,7 +79,7 @@ export async function getCategoriesFromDB() {
       slug: r.category.toLowerCase().replace(/\s+/g, "-"),
     }))
   } catch {
-    return categories
+    return getAllCategories()
   }
 }
 
@@ -96,6 +94,6 @@ export async function getTagsFromDB() {
       count: t._count.posts,
     }))
   } catch {
-    return tags
+    return getAllTags()
   }
 }

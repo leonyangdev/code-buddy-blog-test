@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next"
-import { posts } from "@/lib/data"
+import { getAllPosts } from "@/lib/posts"
 import { getGitHubTopRepos } from "@/lib/github"
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://your-domain.com"
@@ -48,7 +48,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   // 文章页面
-  const blogPages = posts.map((post) => ({
+  const allPosts = getAllPosts()
+  const blogPages = allPosts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.date),
     changeFrequency: "monthly" as const,

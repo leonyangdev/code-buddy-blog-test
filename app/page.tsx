@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import { ArrowRight, Mail } from "lucide-react"
-import { getLatestPosts } from "@/lib/data"
+import { getLatestPosts } from "@/lib/posts"
 import { getGitHubTopRepos } from "@/lib/github"
 import { PostCard } from "@/components/blog/post-card"
 import { ProjectCard } from "@/components/blog/project-card"

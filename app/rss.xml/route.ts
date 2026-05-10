@@ -1,11 +1,9 @@
-import { posts } from "@/lib/data"
+import { getAllPosts } from "@/lib/posts"
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://your-domain.com"
 
 export async function GET() {
-  const sortedPosts = [...posts].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  )
+  const sortedPosts = getAllPosts()
 
   const items = sortedPosts
     .map(
