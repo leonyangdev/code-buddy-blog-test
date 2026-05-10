@@ -45,19 +45,13 @@
   "redirects": [
     {
       "source": "/feed",
-      "destination": "/feed.xml",
+      "destination": "/rss.xml",
       "permanent": true
     },
     {
       "source": "/rss",
-      "destination": "/feed.xml",
+      "destination": "/rss.xml",
       "permanent": true
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/feed.xml",
-      "destination": "/api/feed"
     }
   ]
 }
