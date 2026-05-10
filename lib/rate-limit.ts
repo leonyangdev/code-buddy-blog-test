@@ -33,7 +33,7 @@ export async function checkRateLimit(
         },
       })
 
-      if (count >= limit.max) {
+      if (count > limit.max) {
         const oldestInWindow = await prisma.rateLimit.findFirst({
           where: { ip, endpoint, createdAt: { gte: windowStart } },
           orderBy: { createdAt: "asc" },
