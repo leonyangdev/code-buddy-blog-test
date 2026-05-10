@@ -68,3 +68,12 @@ model ContactMessage {
 
   @@index([createdAt])
 }
+
+model RateLimit {
+  id        Int      @id @default(autoincrement())
+  ip        String
+  endpoint  String
+  createdAt DateTime @default(now())
+
+  @@index([ip, endpoint, createdAt])
+}

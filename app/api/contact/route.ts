@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { checkRateLimit } from "@/lib/rate-limit"
 
 function getResend() {
   const { Resend } = require("resend")
@@ -10,10 +11,40 @@ interface ContactPayload {
   email?: string
   subject?: string
   message?: string
+  website?: string // honeypot
+  "cf-turnstile-response"?: string
 }
 
 function validateEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
+
+async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
+  const secretKey = process.env.TURNSTILE_SECRET_KEY
+  if (!secretKey) return true // Skip verification if not configured
+
+  try {
+    const res = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ secret: secretKey, response: token, remoteip: ip }),
+      }
+    )
+    const data = await res.json()
+    return data.success === true
+  } catch {
+    return false
+  }
+}
+
+function getClientIP(request: Request): string {
+  return (
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    "unknown"
+  )
 }
 
 export async function POST(request: Request) {
@@ -27,7 +58,49 @@ export async function POST(request: Request) {
     }
 
     const body: ContactPayload = await request.json()
-    const { name, email, subject, message } = body
+    const { name, email, subject, message, website, "cf-turnstile-response": turnstileToken } = body
+
+    // Honeypot: silently reject bots
+    if (website) {
+      return NextResponse.json({
+        success: true,
+        message: "消息已发送，我会尽快回复你！",
+      })
+    }
+
+    // Rate limiting
+    const ip = getClientIP(request)
+    const rateLimit = await checkRateLimit(ip, "/api/contact")
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `请求过于频繁，请在 ${rateLimit.retryAfter} 秒后重试`,
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(rateLimit.retryAfter),
+          },
+        }
+      )
+    }
+
+    // Turnstile verification
+    if (!turnstileToken) {
+      return NextResponse.json(
+        { success: false, error: "请完成人机验证" },
+        { status: 400 }
+      )
+    }
+
+    const turnstileValid = await verifyTurnstile(turnstileToken, ip)
+    if (!turnstileValid) {
+      return NextResponse.json(
+        { success: false, error: "人机验证失败，请重试" },
+        { status: 400 }
+      )
+    }
 
     // Validation
     const errors: Record<string, string> = {}

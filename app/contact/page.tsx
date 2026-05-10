@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -22,9 +22,22 @@ interface FormData {
   email: string
   subject: string
   message: string
+  website: string // honeypot
 }
 
 type FormStatus = "idle" | "loading" | "success" | "error"
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (container: HTMLElement, options: Record<string, unknown>) => string
+      remove: (widgetId: string) => void
+      reset: (widgetId: string) => void
+    }
+  }
+}
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
 
 export default function ContactPage() {
   const [formData, setFormData] = useState<FormData>({
@@ -32,9 +45,44 @@ export default function ContactPage() {
     email: "",
     subject: "",
     message: "",
+    website: "",
   })
   const [status, setStatus] = useState<FormStatus>("idle")
   const [errorMsg, setErrorMsg] = useState("")
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const turnstileRef = useRef<HTMLDivElement>(null)
+  const widgetIdRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY || !turnstileRef.current) return
+
+    const renderWidget = () => {
+      if (!window.turnstile || !turnstileRef.current) return
+      widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        callback: (token: string) => setTurnstileToken(token),
+        "expired-callback": () => setTurnstileToken(null),
+        "error-callback": () => setTurnstileToken(null),
+      })
+    }
+
+    if (window.turnstile) {
+      renderWidget()
+      return
+    }
+
+    const script = document.createElement("script")
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js"
+    script.async = true
+    script.onload = renderWidget
+    document.head.appendChild(script)
+
+    return () => {
+      if (widgetIdRef.current && window.turnstile) {
+        window.turnstile.remove(widgetIdRef.current)
+      }
+    }
+  }, [])
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -53,7 +101,10 @@ export default function ContactPage() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          "cf-turnstile-response": turnstileToken,
+        }),
       })
       const data = await res.json()
 
@@ -62,7 +113,11 @@ export default function ContactPage() {
       }
 
       setStatus("success")
-      setFormData({ name: "", email: "", subject: "", message: "" })
+      setFormData({ name: "", email: "", subject: "", message: "", website: "" })
+      setTurnstileToken(null)
+      if (widgetIdRef.current && window.turnstile) {
+        window.turnstile.reset(widgetIdRef.current)
+      }
     } catch (err) {
       setStatus("error")
       setErrorMsg(err instanceof Error ? err.message : "发送失败，请稍后重试")
@@ -108,6 +163,19 @@ export default function ContactPage() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Honeypot field - hidden from real users */}
+                <div className="hidden" aria-hidden="true">
+                  <label htmlFor="website">Website</label>
+                  <input
+                    type="text"
+                    id="website"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={formData.website}
+                    onChange={handleChange}
+                  />
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label htmlFor="name" className="text-label-14">
@@ -170,6 +238,11 @@ export default function ContactPage() {
                     className="w-full px-3 py-2 rounded-lg border border-border bg-background text-copy-14 placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 transition-shadow duration-150 resize-none"
                   />
                 </div>
+
+                {/* Turnstile widget */}
+                {TURNSTILE_SITE_KEY && (
+                  <div ref={turnstileRef} className="flex justify-center" />
+                )}
 
                 {status === "error" && errorMsg && (
                   <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/5 border border-destructive/20">
