@@ -56,6 +56,8 @@ export default function ContactPage() {
   useEffect(() => {
     if (!TURNSTILE_SITE_KEY || !turnstileRef.current) return
 
+    let scriptEl: HTMLScriptElement | null = null
+
     const renderWidget = () => {
       if (!window.turnstile || !turnstileRef.current) return
       widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
@@ -66,23 +68,28 @@ export default function ContactPage() {
       })
     }
 
-    if (window.turnstile) {
-      renderWidget()
-      return
+    const init = () => {
+      if (window.turnstile) {
+        renderWidget()
+        return
+      }
+      scriptEl = document.createElement("script")
+      scriptEl.src = "https://challenges.cloudflare.com/turnstile/v0/api.js"
+      scriptEl.async = true
+      scriptEl.onload = renderWidget
+      document.head.appendChild(scriptEl)
     }
 
-    const script = document.createElement("script")
-    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js"
-    script.async = true
-    script.onload = renderWidget
-    document.head.appendChild(script)
+    init()
 
     return () => {
       if (widgetIdRef.current && window.turnstile) {
         window.turnstile.remove(widgetIdRef.current)
+        widgetIdRef.current = null
       }
+      setTurnstileToken(null)
     }
-  }, [])
+  }, [status])
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
